@@ -1,30 +1,23 @@
 package com.empower.steps;
 
+import cucumber.api.PendingException;
 import net.thucydides.core.annotations.Steps;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import com.empower.steps.serenity.EndUserSteps;
+import com.empower.steps.serenity.LoginSteps;
 
 public class DefinitionSteps {
 
     @Steps
-    EndUserSteps anna;
+    EndUserSteps endUserSteps;
+    @Steps
+    LoginSteps loginSteps;
 
-    @Given("the user is on the Wikionary home page")
-    public void givenTheUserIsOnTheWikionaryHomePage() {
-        anna.is_the_home_page();
+    @Given("^Login with \"([^\"]*)\" and \"([^\"]*)\"$")
+    public void login(String userID, String password) {
+        loginSteps.login(userID, password);
     }
-
-    @When("the user looks up the definition of the word '(.*)'")
-    public void whenTheUserLooksUpTheDefinitionOf(String word) {
-        anna.looks_for(word);
-    }
-
-    @Then("they should see the definition '(.*)'")
-    public void thenTheyShouldSeeADefinitionContainingTheWords(String definition) {
-        anna.should_see_definition(definition);
-    }
-
 }
