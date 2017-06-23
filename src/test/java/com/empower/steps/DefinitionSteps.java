@@ -20,4 +20,9 @@ public class DefinitionSteps {
     public void login(String userID, String password) {
         loginSteps.login(userID, password);
     }
+
+    @Given("^Open Login Page$")
+    public void openLoginPage() {
+        endUserSteps.openLoginPage();
+    }
 }
