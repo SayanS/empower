@@ -9,7 +9,7 @@ public class DefinitionStepsAllRequests {
     AllRequestsSteps allRequestsSteps;
 
     @And("^Click on Create Request button$")
-    public void clickOnCreateRequestButton(String buttonName){
+    public void clickOnCreateRequestButton(){
         allRequestsSteps.clickOnCreateRequestButton();
     }
 }
