@@ -15,6 +15,7 @@ public class EndUserSteps {
     HeaderMenu headerMenu;
     LoginPage loginPage;
 
+    @Step
     public void openLoginPage() {
         loginPage.open();
     }

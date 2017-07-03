@@ -21,15 +21,13 @@ public class HeaderMenu extends PageObject {
     public void clickOnPostSales() {
         moveTo(".//div[@data-toggle='dropdown']");
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", $(".//div[@data-toggle='dropdown']"));
-        //$(POST_SALES).click();
     }
 
     public void selectPostSalesItem(String itemName) {
         Actions actions = new Actions(getDriver());
-        actions.moveToElement($(POST_SALES).find(By.xpath("//a[contains(text(),'" + itemName + "')]"))).perform();
-        (new WebDriverWait(getDriver(), 5000)).until(ExpectedConditions.elementToBeClickable(By.xpath(POST_SALES + "//a[contains(text(),'" + itemName + "')]")));
-
-        $(POST_SALES).find(By.xpath("//a[contains(text(),'" + itemName + "')]")).click();
+        actions.moveToElement(getDriver().findElement(By.xpath("//a[contains(text(),'" + itemName + "')]"))).perform();
+       (new WebDriverWait(getDriver(), 10000)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(text(),'" + itemName + "')]")));
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].click();", $("//a[contains(text(),'" + itemName + "')]"));
     }
 
 

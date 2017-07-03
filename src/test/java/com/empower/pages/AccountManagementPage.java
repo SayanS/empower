@@ -11,7 +11,7 @@ public class AccountManagementPage extends PageObject {
     String REGION_DROP_DOWN = ".//select[@id='region']";
     String SEARCH_BUTTON = "(.//button[.='Search'])[2]";
     String SEARCH_ACCOUNT_NAME_FIELD=".//*[@id='searchAccount']";
-    String ACCOUNT_NAME_IN_SEARCH_RESULTS="(.//tr/td)[2]/a[.='$accountName']";
+    String ACCOUNT_NAME_WITH_SALES_ORG_IN_SEARCH_RESULTS="//td[.='$salesOrg']/preceding-sibling::td[.='$accountName']";
     public void enterAccountName(String accountName) {
         $(SEARCH_ACCOUNT_NAME_FIELD).clear();
          $(SEARCH_ACCOUNT_NAME_FIELD).sendKeys(accountName);
@@ -26,7 +26,7 @@ public class AccountManagementPage extends PageObject {
         $(SEARCH_BUTTON).click();
     }
 
-    public void selectAccountFromSearchResults(String accountName) {
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].click();", $(ACCOUNT_NAME_IN_SEARCH_RESULTS.replace("$accountName",accountName)));
+    public void selectAccountFromSearchResults(String accountName, String salesOrg) {
+       findBy(ACCOUNT_NAME_WITH_SALES_ORG_IN_SEARCH_RESULTS.replace("$accountName",accountName).replace("$salesOrg",salesOrg)).click();
     }
 }
