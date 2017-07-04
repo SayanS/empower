@@ -14,13 +14,13 @@ public class DefinitionStepsAllRequests {
     AllRequestsSteps allRequestsSteps;
 
     @And("^Click on Create Request button$")
-    public void clickOnCreateRequestButton(){
+    public void clickOnCreateRequestButton() {
         allRequestsSteps.clickOnCreateRequestButton();
     }
 
     @And("^Search for value \"([^\"]*)\" by \"([^\"]*)\"$")
     public void searchForValueBy(String value, String searchBy) {
-       allRequestsSteps.searchForValueBy(value, searchBy);
+        allRequestsSteps.searchForValueBy(value, searchBy);
     }
 
 
@@ -29,13 +29,34 @@ public class DefinitionStepsAllRequests {
         allRequestsSteps.isAllNextButtonInactive();
     }
 
-    @And("^Add to Product List for Invoice No line number \"([^\"]*)\"$")
-    public void addToProductListForInvoiceNoItemLineNumber(String lineNumber){
-       allRequestsSteps.addToProductListForInvoiceNoLines(lineNumber);
+    @And("^From Search results select Invoice line number \"([^\"]*)\" and select Products lines numbers$")
+    public void fromSearchResultsSelectInvoiceLineNumberAndSelectProductsLinesNumbers(String invoiceLine, List<String> productsLines) {
+        allRequestsSteps.fromSearchResultsSelectInvoiceLineAndSelectProductsLines(invoiceLine, productsLines);
     }
 
-    @And("^From Product List for Invoice No select line number$")
-    public void fromProductListForInvoiceNoSelectLineNumber(List<String> linesNumbers) {
-       allRequestsSteps.selectLinesFromProductListForInvoiceNo(linesNumbers);
+    @Then("^Arrow icon should have color \"([^\"]*)\" for invoices in lines$")
+    public void arrowIconShouldHaveColorForInvoicesInLines(String color, List<String> lineNumbers) {
+        allRequestsSteps.isColorOfArrowIconInLines(color, lineNumbers);
     }
+
+    @Then("^All Next buttons should be active$")
+    public void allNextButtonsShouldBeActive() {
+        allRequestsSteps.isAllNextButtonActive();
+    }
+
+    @And("^Click on top Next button$")
+    public void clickOnTopNextButton() {
+        allRequestsSteps.clickOnTopNextButton();
+    }
+
+    @Then("^Reason for Request step should contain all Catalog № from first Step$")
+    public void reasonForRequestStepShouldContainAllCatalogFromFirstStep() {
+        allRequestsSteps.isReasonForRequestStepContainAllCatalogFromFirstStep();
+    }
+
+    @Then("^All Qty label on Reason for Request step should contain appropriate values from step 1$")
+    public void allQtyLabelOnReasonForRequestStepShouldContainAppropriateValuesFromStep() {
+        allRequestsSteps.isAllQtyLabelOnReasonForRequestStepContainAppropriateValuesFromStep1();
+    }
+
 }

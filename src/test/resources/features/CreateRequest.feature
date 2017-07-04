@@ -12,15 +12,15 @@ Feature: Request creation
     And Click on Create Request button
     And Search for value "thql1120" by "Catalog No."
     Then All Next buttons should be inactive
-    And Add to Product List for Invoice No line number "1"
-    And From Product List for Invoice No select line number
+    And From Search results select Invoice line number "1" and select Products lines numbers
     |1|
     |3|
-    Then Arrow icon of "1" line in Search Results should be "green"
-    Then Then Top and Bottom "Next" buttons should be active
+    Then Arrow icon should have color "rgba(70, 173, 0, 1)" for invoices in lines
+    |1|
+    Then All Next buttons should be active
     And Click on top Next button
-    Then All Catalog № from Product List for Invoice No should be displayed on Reason for Request step
-    Then All Qty from Product List for Invoice No should be displayed on Reason for Request step
+    Then Reason for Request step should contain all Catalog № from first Step
+    Then All Qty label on Reason for Request step should contain appropriate values from step 1
     Then All Next buttons should be inactive
 
 

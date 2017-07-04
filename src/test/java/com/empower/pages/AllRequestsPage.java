@@ -1,15 +1,19 @@
 package com.empower.pages;
 
+import com.empower.models.Invoice;
+import com.empower.models.InvoiceLine;
 import net.serenitybdd.core.annotations.findby.By;
 import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.security.PrivateKey;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AllRequestsPage extends PageObject {
@@ -20,7 +24,10 @@ public class AllRequestsPage extends PageObject {
     private String TOP_NEXT_BUTTON = "(.//button[contains(text(),'Next')])[1]";
     private String BOTOM_NEXT_BUTTON = "(.//button[contains(text(),'Next')])[2]";
     private String ALL_ARROW_ICON = "(//table[@id='return-invoice-table']/tbody/tr/td/i)";
-    private String ALL_PRODUCT_LIST_FOR_INVOICES_CHECKBOXES = "(.//tbody/tr//label[@class='myCheckbox'])";
+    private String STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES = "(.//tbody/tr//label[contains(@class,'myCheckbox')])";
+    private String STEP_1_ALL_NAMES_OF_PRODUCT_LIST_FOR_INVOICES="(.//table[@id='return-invoice-line-table']/tbody/tr/td[3])";
+    private String STEP_2_ALL_CATALOG = ".//table[@id='returnTrackingTableStep2']/tbody/tr/td[1]";
+    private String STEP_1_ALL_QTY_OF_PRODUCT_LIST_FOR_INVOICES="(.//table[@id='return-invoice-line-table']/tbody/tr/td[4])";
 
     public void clickOnCreateRequestButton() {
         Actions actions = new Actions(getDriver());
@@ -32,8 +39,7 @@ public class AllRequestsPage extends PageObject {
     public void searchForValueBy(String value, String searchBy) {
         (new WebDriverWait(getDriver(), 5000)).until(ExpectedConditions.elementToBeClickable(org.openqa.selenium.By.xpath(SEARCH_BY_DROP_DOWN)));
         $(SEARCH_BY_DROP_DOWN).click();
-        //(new Actions(getDriver())).moveToElement(getDriver().findElement(org.openqa.selenium.By.ByTagName.xpath(".//ul/li[.='"+searchBy+"']")));
-        findBy(".//ul/li[.='"+searchBy+"']").click();
+        findBy(".//ul/li[.='" + searchBy + "']").click();
         $(SEARCH_FIELD).clear();
         $(SEARCH_FIELD).sendKeys(value);
         $(GO_BUTTON).click();
@@ -48,18 +54,73 @@ public class AllRequestsPage extends PageObject {
         return $(BOTOM_NEXT_BUTTON);
     }
 
-    public void addToProductListForInvoiceNoLines(String lineNumbers) {
-        (new WebDriverWait(getDriver(),10000)).until(ExpectedConditions.presenceOfElementLocated(org.openqa.selenium.By.xpath(ALL_ARROW_ICON + "[" + lineNumbers + "]")));
+    public Invoice addToProductListForInvoiceNoLines(String lineNumbers) {
+        Invoice invoice=new Invoice();
+
+        (new WebDriverWait(getDriver(), 10000)).until(ExpectedConditions.presenceOfElementLocated(org.openqa.selenium.By.xpath(ALL_ARROW_ICON + "[" + lineNumbers + "]")));
         (new Actions(getDriver())).moveToElement(findBy(ALL_ARROW_ICON + "[" + lineNumbers + "]"));
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", $(ALL_ARROW_ICON + "[" + lineNumbers + "]"));
         $(ALL_ARROW_ICON + "[" + lineNumbers + "]").click();
+
+        invoice.setNumber($("(.//table[@id='return-invoice-table']//tr/td[1])"+ "[" + lineNumbers + "]").getText());
+        invoice.setDate($("(.//table[@id='return-invoice-table']//tr/td[2])"+ "[" + lineNumbers + "]").getText());
+        invoice.setPoNumber($("(.//table[@id='return-invoice-table']//tr/td[3])"+ "[" + lineNumbers + "]").getText());
+        invoice.setGeSalesOrder($("(.//table[@id='return-invoice-table']//tr/td[4])"+ "[" + lineNumbers + "]").getText());
+        invoice.setCheckedForRequest(true);
+
+        return invoice;
     }
 
-    public void selectLinesFromProductListForInvoiceNo(List<String> linesNumbers) {
+    public List<InvoiceLine> selectProductsForRequestLines(List<String> linesNumbers) {
+        List<InvoiceLine> selectedProducts=new ArrayList<>();
+        InvoiceLine invoiceLine=new InvoiceLine();
         for (String lineNumber : linesNumbers) {
-            ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", $(ALL_PRODUCT_LIST_FOR_INVOICES_CHECKBOXES + "[" + lineNumber + "]"));
-            $(ALL_PRODUCT_LIST_FOR_INVOICES_CHECKBOXES + "[" + lineNumber + "]").click();
+            ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", $(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES + "[" + lineNumber + "]"));
+            $(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES + "[" + lineNumber + "]").click();
 
+            invoiceLine.setCatalogName($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[3])"+"[" + lineNumber + "]").getText());
+            invoiceLine.setQty($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[4])"+"[" + lineNumber + "]").getText());
+            invoiceLine.setReturnable($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[5])"+"[" + lineNumber + "]").getText());
+            invoiceLine.setCheckedForRequest(true);
+            selectedProducts.add(new InvoiceLine());
+            selectedProducts.get(selectedProducts.size()-1).setCheckedForRequest(invoiceLine.getCheckedForRequest());
+            selectedProducts.get(selectedProducts.size()-1).setCatalogName(invoiceLine.getCatalogName());
+            selectedProducts.get(selectedProducts.size()-1).setQty(invoiceLine.getQty());
         }
+        return selectedProducts;
+    }
+
+    public String getColorOfArrowIcon(String lineNumber) {
+        return $(ALL_ARROW_ICON + "[" + lineNumber + "]").getCssValue("color");
+    }
+
+    public void clickOnTopNextButton() {
+        (new WebDriverWait(getDriver(), 5000)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(TOP_NEXT_BUTTON)));
+        $(TOP_NEXT_BUTTON).click();
+    }
+
+    public List<String> getAllCatalogNameFromReasonForRequestStep() {
+        List<String> catalogNames=new ArrayList<>();
+        for(WebElement catalogName:getDriver().findElements(By.xpath(STEP_2_ALL_CATALOG))){
+            catalogNames.add(catalogName.getText());
+        }
+        return catalogNames;
+    }
+
+    public List<String> getAllQtyFromQtyLabelStep_2() {
+        List<String> labelQty=new ArrayList<>();
+        for(WebElement label:getDriver().findElements(By.xpath(".//table[@id='returnTrackingTableStep2']//span[contains(@class,'reason-qty-text')]"))){
+            labelQty.add(label.getText().replace("of ",""));
+        }
+        return labelQty;
+    }
+
+    public Invoice getInvoice(String lineNumber) {
+        Invoice invoice=new Invoice();
+        invoice.setNumber($("//table[@id='return-invoice-table']//tr/td[1]/span)["+lineNumber+"]").getText());
+        invoice.setDate($("//table[@id='return-invoice-table']//tr/td[2])["+lineNumber+"]").getText());
+        invoice.setPoNumber($("//table[@id='return-invoice-table']//tr/td[3])["+lineNumber+"]").getText());
+        invoice.setGeSalesOrder($("//table[@id='return-invoice-table']//tr/td[4])["+lineNumber+"]").getText());
+        return invoice;
     }
 }
