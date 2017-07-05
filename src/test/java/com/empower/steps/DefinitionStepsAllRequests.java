@@ -18,7 +18,7 @@ public class DefinitionStepsAllRequests {
         allRequestsSteps.clickOnCreateRequestButton();
     }
 
-    @And("^Search for value \"([^\"]*)\" by \"([^\"]*)\"$")
+    @And("^Search for \"([^\"]*)\" by \"([^\"]*)\"$")
     public void searchForValueBy(String value, String searchBy) {
         allRequestsSteps.searchForValueBy(value, searchBy);
     }
@@ -29,14 +29,14 @@ public class DefinitionStepsAllRequests {
         allRequestsSteps.isAllNextButtonInactive();
     }
 
-    @And("^From Search results select Invoice line number \"([^\"]*)\" and select Products lines numbers$")
-    public void fromSearchResultsSelectInvoiceLineNumberAndSelectProductsLinesNumbers(String invoiceLine, List<String> productsLines) {
-        allRequestsSteps.fromSearchResultsSelectInvoiceLineAndSelectProductsLines(invoiceLine, productsLines);
+    @And("^Select Invoice from Search results in line \"([^\"]*)\"$")
+    public void selectInvoicefromSearchResults(String lineNumber) {
+        allRequestsSteps.selectInvoicefromSearchResults(lineNumber);
     }
 
-    @Then("^Arrow icon should have color \"([^\"]*)\" for invoices in lines$")
-    public void arrowIconShouldHaveColorForInvoicesInLines(String color, List<String> lineNumbers) {
-        allRequestsSteps.isColorOfArrowIconInLines(color, lineNumbers);
+    @Then("^Arrow icon should have color \"([^\"]*)\" for invoices \"([^\"]*)\"$")
+    public void arrowIconShouldHaveColorForInvoicesInLines(String color, String lines) {
+        allRequestsSteps.isColorOfArrowIconInLines(color, lines);
     }
 
     @Then("^All Next buttons should be active$")
@@ -59,4 +59,14 @@ public class DefinitionStepsAllRequests {
         allRequestsSteps.isAllQtyLabelOnReasonForRequestStepContainAppropriateValuesFromStep1();
     }
 
+
+    @And("^Select First Product from requested list$")
+    public void selectFirstProductFromRequestedList() {
+        allRequestsSteps.selectFirstProductFromRequestedList();
+    }
+
+    @And("^Select Last Product from requested list$")
+    public void selectLastProductFromRequestedList() {
+        allRequestsSteps.selectLastProductFromRequestedList();
+    }
 }

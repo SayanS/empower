@@ -15,7 +15,7 @@ public class DefinitionStepsAccountManagement {
         accountManagementSteps.searchForAccountFromRegion(accountNumber, region);
     }
 
-    @And("^Select account \"([^\"]*)\" from search results with Seles org \"([^\"]*)\"$")
+    @And("^Select account \"([^\"]*)\" from search results with Sales org \"([^\"]*)\"$")
     public void selectAccountFromSearchResults(String accountName, String salesOrg) {
         accountManagementSteps.selectAccountFromSearchResults(accountName, salesOrg);
     }

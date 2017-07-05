@@ -30,10 +30,8 @@ public class AllRequestsSteps {
     }
 
     @Step
-    public void isColorOfArrowIconInLines(String expectedColor, List<String> lineNumbers) {
-        for (String lineNumber : lineNumbers) {
-            Assert.assertEquals("The color of Arrow icon isn't " + expectedColor + " in line " + lineNumber, expectedColor, allRequestsPage.getColorOfArrowIcon(lineNumber));
-        }
+    public void isColorOfArrowIconInLines(String expectedColor, String lines) {
+            Assert.assertEquals("The color of Arrow icon isn't " + expectedColor + " in line " + lines, expectedColor, allRequestsPage.getColorOfArrowIcon(lines));
     }
 
     @Step
@@ -64,10 +62,17 @@ public class AllRequestsSteps {
     }
 
     @Step
-    public void fromSearchResultsSelectInvoiceLineAndSelectProductsLines(String invoiceLine, List<String> productsLines) {
+    public void selectInvoicefromSearchResults(String lineNumber) {
         Invoice invoice = new Invoice();
-        invoice = allRequestsPage.addToProductListForInvoiceNoLines(invoiceLine);
-        invoice.setLines(allRequestsPage.selectProductsForRequestLines(productsLines));
+        invoice = allRequestsPage.selectInvoicefromSearchResults(lineNumber);
         invoicesForRequest.add(invoice);
+    }
+    @Step
+    public void selectFirstProductFromRequestedList() {
+        allRequestsPage.selectFirstProductFromRequestedList();
+    }
+    @Step
+    public void selectLastProductFromRequestedList() {
+        allRequestsPage.selectLastProductFromRequestedList();
     }
 }
