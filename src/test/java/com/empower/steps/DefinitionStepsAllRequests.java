@@ -34,9 +34,9 @@ public class DefinitionStepsAllRequests {
         allRequestsSteps.selectInvoicefromSearchResults(lineNumber);
     }
 
-    @Then("^Arrow icon should have color \"([^\"]*)\" for invoices \"([^\"]*)\"$")
-    public void arrowIconShouldHaveColorForInvoicesInLines(String color, String lines) {
-        allRequestsSteps.isColorOfArrowIconInLines(color, lines);
+    @Then("^Arrow icon should have color \"([^\"]*)\" for selected invoice in line \"([^\"]*)\"$")
+    public void arrowIconShouldHaveColorForInvoiceInLine(String color, String line) {
+        allRequestsSteps.isColorOfArrowIconInLine(color, line);
     }
 
     @Then("^All Next buttons should be active$")
@@ -49,24 +49,34 @@ public class DefinitionStepsAllRequests {
         allRequestsSteps.clickOnTopNextButton();
     }
 
-    @Then("^Reason for Request step should contain all Catalog № from first Step$")
+    @Then("^Reason for Request step should contain all selected products from Step 1$")
     public void reasonForRequestStepShouldContainAllCatalogFromFirstStep() {
         allRequestsSteps.isReasonForRequestStepContainAllCatalogFromFirstStep();
     }
 
-    @Then("^All Qty label on Reason for Request step should contain appropriate values from step 1$")
+    @Then("^All Qty label on Reason for Request step should contain appropriate values from Step 1$")
     public void allQtyLabelOnReasonForRequestStepShouldContainAppropriateValuesFromStep() {
         allRequestsSteps.isAllQtyLabelOnReasonForRequestStepContainAppropriateValuesFromStep1();
     }
 
 
-    @And("^Select First Product from requested list$")
-    public void selectFirstProductFromRequestedList() {
-        allRequestsSteps.selectFirstProductFromRequestedList();
+    @And("^Select \"([^\"]*)\" Product from requested list$")
+    public void selectProductFromRequestedList(String index) {
+        allRequestsSteps.selectProductFromRequestedList(index);
     }
 
     @And("^Select Last Product from requested list$")
     public void selectLastProductFromRequestedList() {
         allRequestsSteps.selectLastProductFromRequestedList();
+    }
+
+    @And("^Select All Product from requested list$")
+    public void selectAllProductFromRequestedList() {
+       allRequestsSteps.selectAllProductFromRequestedList();
+    }
+
+    @Then("^Invoice should contain product \"([^\"]*)\"$")
+    public void invoiceShouldContainProduct(String productName) {
+        allRequestsSteps.isInvoiceContains(productName);
     }
 }

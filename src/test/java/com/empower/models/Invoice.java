@@ -12,6 +12,18 @@ public class Invoice {
     private Boolean checkedForRequest;
     private List<InvoiceLine> lines=new ArrayList<>();
 
+    public Invoice(){
+    }
+
+    public Invoice(Invoice invoice){
+        this.number=invoice.number;
+        this.date=invoice.date;
+        this.poNumber=invoice.poNumber;
+        this.geSalesOrder=invoice.geSalesOrder;
+        this.checkedForRequest=invoice.checkedForRequest;
+        this.lines=invoice.lines;
+    }
+
     public String getNumber() {
         return number;
     }
@@ -63,4 +75,5 @@ public class Invoice {
     public void addInvoiceLine(InvoiceLine line) {
         this.lines.add(line);
     }
+
 }

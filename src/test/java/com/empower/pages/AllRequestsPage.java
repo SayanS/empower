@@ -8,15 +8,15 @@ import net.serenitybdd.core.pages.WebElementFacade;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AllRequestsPage extends PageObject {
+
+
     private String CREATE_REQUEST_BUTTON = ".//button[@id='create_request']";
     private String SEARCH_BY_DROP_DOWN = ".//div[@class='input-group-addon']";
     private String SEARCH_FIELD = ".//input[@name='value']";
@@ -71,8 +71,8 @@ public class AllRequestsPage extends PageObject {
     }
 
 
-    public String getColorOfArrowIcon(String lineNumber) {
-        return $(ALL_ARROW_ICON + "[" + lineNumber + "]").getCssValue("color");
+    public String getColorOfArrowIcon(String line) {
+        return $(ALL_ARROW_ICON + "[" + line + "]").getCssValue("color");
     }
 
     public void clickOnTopNextButton() {
@@ -88,44 +88,26 @@ public class AllRequestsPage extends PageObject {
         return catalogNames;
     }
 
-    public List<String> getAllQtyFromQtyLabelStep_2() {
-        List<String> labelQty = new ArrayList<>();
-        for (WebElement label : getDriver().findElements(By.xpath(".//table[@id='returnTrackingTableStep2']//span[contains(@class,'reason-qty-text')]"))) {
-            labelQty.add(label.getText().replace("of ", ""));
-        }
-        return labelQty;
-    }
-
-    public Invoice getInvoice(String lineNumber) {
-        Invoice invoice = new Invoice();
-        invoice.setNumber($("//table[@id='return-invoice-table']//tr/td[1]/span)[" + lineNumber + "]").getText());
-        invoice.setDate($("//table[@id='return-invoice-table']//tr/td[2])[" + lineNumber + "]").getText());
-        invoice.setPoNumber($("//table[@id='return-invoice-table']//tr/td[3])[" + lineNumber + "]").getText());
-        invoice.setGeSalesOrder($("//table[@id='return-invoice-table']//tr/td[4])[" + lineNumber + "]").getText());
-        return invoice;
+    public String getQtyLabelFromStep2(Integer lineNumber) {
+        return  getDriver().findElement(By.xpath("(.//table[@id='returnTrackingTableStep2']//span[contains(@class,'reason-qty-text')])"+"["+lineNumber+"]")).getText().replace("of ", "");
     }
 
     public InvoiceLine selectProductFromRequestedList(String index) {
         InvoiceLine invoiceLine=new InvoiceLine();
+        (new WebDriverWait(getDriver(),5000)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='FullScreenProgressIndicatorModalDialog']//img[contains(@src,'ajax-loader.gif')]")));
+        (new WebDriverWait(getDriver(),5000)).until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@id='FullScreenProgressIndicatorModalDialog']//img[contains(@src,'ajax-loader.gif')]")));
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", $(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES+"["+index+"]"));
-        $("(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES)"+"["+index+"]").click();
+        $(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES+"["+index+"]").click();
         invoiceLine.setCatalogName($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[3])"+"["+index+"]").getText());
         invoiceLine.setQty($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[4])"+"["+index+"]").getText());
         invoiceLine.setReturnable($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[5])"+"["+index+"]").getText());
         invoiceLine.setCheckedForRequest(true);
+
         return invoiceLine;
     }
 
-
-    public InvoiceLine selectFirstProductFromRequestedList() {
-        InvoiceLine invoiceLine=new InvoiceLine();
-        selectProductFromRequestedList("1");
-        return invoiceLine;
-    }
     public InvoiceLine selectLastProductFromRequestedList() {
-        InvoiceLine invoiceLine=new InvoiceLine();
-        selectProductFromRequestedList(Integer.toString(findAll(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES).size()));
-        return invoiceLine;
+        return selectProductFromRequestedList(Integer.toString(findAll(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES).size()));
     }
 
     public List<InvoiceLine> selectAllProductFromRequestedList() {
@@ -136,4 +118,7 @@ public class AllRequestsPage extends PageObject {
         return invoiceLines;
     }
 
+    public List<String> getInvoiceProductsNames() {
+        return (new Utils()).getTextFromList(findAll(STEP_1_ALL_NAMES_OF_PRODUCT_LIST_FOR_INVOICES));
+    }
 }

@@ -30,8 +30,8 @@ public class AllRequestsSteps {
     }
 
     @Step
-    public void isColorOfArrowIconInLines(String expectedColor, String lines) {
-            Assert.assertEquals("The color of Arrow icon isn't " + expectedColor + " in line " + lines, expectedColor, allRequestsPage.getColorOfArrowIcon(lines));
+    public void isColorOfArrowIconInLine(String expectedColor, String line) {
+            Assert.assertEquals("The color of Arrow icon isn't " + expectedColor + " in line " + line, expectedColor, allRequestsPage.getColorOfArrowIcon(line));
     }
 
     @Step
@@ -58,21 +58,34 @@ public class AllRequestsSteps {
 
     @Step
     public void isAllQtyLabelOnReasonForRequestStepContainAppropriateValuesFromStep1() {
-        // Assert.assertEquals(selectedProductQtyFromStep_1, allRequestsPage.getAllQtyFromQtyLabelStep_2());
+        Integer lineNumber=1;
+        for(Invoice invoice:invoicesForRequest) {
+            for(InvoiceLine invoiceLine:invoice.getLines()) {
+                Assert.assertEquals("Qty from step 2 is mismatched to Qty from step 1 in line "+lineNumber, invoiceLine.getQty(), allRequestsPage.getQtyLabelFromStep2(lineNumber));
+                lineNumber++;
+            }
+        }
     }
 
     @Step
     public void selectInvoicefromSearchResults(String lineNumber) {
-        Invoice invoice = new Invoice();
-        invoice = allRequestsPage.selectInvoicefromSearchResults(lineNumber);
-        invoicesForRequest.add(invoice);
+        invoicesForRequest.add(new Invoice(allRequestsPage.selectInvoicefromSearchResults(lineNumber)));
     }
     @Step
-    public void selectFirstProductFromRequestedList() {
-        allRequestsPage.selectFirstProductFromRequestedList();
+    public void selectProductFromRequestedList(String index) {
+        invoicesForRequest.get(invoicesForRequest.size()-1).addInvoiceLine(allRequestsPage.selectProductFromRequestedList(index));
     }
     @Step
     public void selectLastProductFromRequestedList() {
-        allRequestsPage.selectLastProductFromRequestedList();
+        invoicesForRequest.get(invoicesForRequest.size()-1).addInvoiceLine(allRequestsPage.selectLastProductFromRequestedList());
+    }
+
+    @Step
+    public void selectAllProductFromRequestedList() {
+        invoicesForRequest.get(invoicesForRequest.size()-1).setLines(allRequestsPage.selectAllProductFromRequestedList());
+    }
+    @Step
+    public void isInvoiceContains(String productName) {
+        Assert.assertTrue("Invoice isn't contain "+productName+" product in "+ allRequestsPage.getInvoiceProductsNames().toString(),allRequestsPage.getInvoiceProductsNames().contains(productName));
     }
 }
