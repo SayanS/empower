@@ -20,15 +20,21 @@ Feature: Request creation
 
     And Select Invoice from Search results in line "3"
     And Select "1" Product from requested list
-    Then Arrow icon should have color "rgba(70, 173, 0, 1)" for selected invoice in line "2"
+    Then Arrow icon should have color "rgba(70, 173, 0, 1)" for selected invoice in line "3"
     And Select Last Product from requested list
-    Then Arrow icon should have color "rgba(70, 173, 0, 1)" for selected invoice in line "5"
+    Then Arrow icon should have color "rgba(70, 173, 0, 1)" for selected invoice in line "3"
     Then All Next buttons should be active
 
     And Click on top Next button
     Then Reason for Request step should contain all selected products from Step 1
     Then All Qty label on Reason for Request step should contain appropriate values from Step 1
     Then All Next buttons should be inactive
+    Then Select "Defective" from Reason for Request drop-down for Product in line "1"
+    Then Select value "Cosmetic" for Requested Type product in line "1"
+    Then Select Requested Sub Type value "Product" for Product in line "1"
+    Then Select Requested Action "Return & Repair" for Product in line "1"
+
+
 
 
 

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AllRequestsPage extends PageObject {
-
+    private Utils utils;
 
     private String CREATE_REQUEST_BUTTON = ".//button[@id='create_request']";
     private String SEARCH_BY_DROP_DOWN = ".//div[@class='input-group-addon']";
@@ -26,8 +26,9 @@ public class AllRequestsPage extends PageObject {
     private String ALL_ARROW_ICON = "(//table[@id='return-invoice-table']/tbody/tr/td/i)";
     private String STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES = "(.//tbody/tr//label[contains(@class,'myCheckbox')])";
     private String STEP_1_ALL_NAMES_OF_PRODUCT_LIST_FOR_INVOICES = "(.//table[@id='return-invoice-line-table']/tbody/tr/td[3])";
-    private String STEP_2_ALL_CATALOG = ".//table[@id='returnTrackingTableStep2']/tbody/tr/td[1]";
-    private String STEP_1_ALL_QTY_OF_PRODUCT_LIST_FOR_INVOICES = "(.//table[@id='return-invoice-line-table']/tbody/tr/td[4])";
+    private String STEP_2_ALL_CATALOG = "(.//table[@id='returnTrackingTableStep2']/tbody/tr/td[1])";
+    private String STEP_2_REASON_FOR_REQUEST_DROPDOWN="(.//td[@class='reason-request-col']//div[@data-toggle='dropdown'])";
+    private String STEP_2_REQUEST_ACTION_DROPDOWN="(.//td[@class='request-action-col']//select)";
 
 
     public void clickOnCreateRequestButton() {
@@ -80,27 +81,28 @@ public class AllRequestsPage extends PageObject {
         $(TOP_NEXT_BUTTON).click();
     }
 
-    public List<String> getAllCatalogNameFromReasonForRequestStep() {
-        List<String> catalogNames = new ArrayList<>();
-        for (WebElement catalogName : getDriver().findElements(By.xpath(STEP_2_ALL_CATALOG))) {
-            catalogNames.add(catalogName.getText());
+    public List<InvoiceLine> getAllCatalogNameAndQtyLabelFromReasonForRequestStep() {
+        List<InvoiceLine> catalogNames = new ArrayList<>();
+        for (int i = 1; i <= getDriver().findElements(By.xpath(STEP_2_ALL_CATALOG)).size() ; i++) {
+            catalogNames.add(new InvoiceLine());
+            catalogNames.get(i-1).setCatalogName(findBy(STEP_2_ALL_CATALOG + "[" + i + "]").getText());
+            catalogNames.get(i-1).setLabelQty(findBy("(.//table[@id='returnTrackingTableStep2']//span[contains(@class,'reason-qty-text')])" + "[" + i + "]").getText().replace("of ", ""));
         }
         return catalogNames;
     }
 
     public String getQtyLabelFromStep2(Integer lineNumber) {
-        return  getDriver().findElement(By.xpath("(.//table[@id='returnTrackingTableStep2']//span[contains(@class,'reason-qty-text')])"+"["+lineNumber+"]")).getText().replace("of ", "");
+        return getDriver().findElement(By.xpath("(.//table[@id='returnTrackingTableStep2']//span[contains(@class,'reason-qty-text')])" + "[" + lineNumber + "]")).getText().replace("of ", "");
     }
 
     public InvoiceLine selectProductFromRequestedList(String index) {
-        InvoiceLine invoiceLine=new InvoiceLine();
-        (new WebDriverWait(getDriver(),5000)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='FullScreenProgressIndicatorModalDialog']//img[contains(@src,'ajax-loader.gif')]")));
-        (new WebDriverWait(getDriver(),5000)).until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@id='FullScreenProgressIndicatorModalDialog']//img[contains(@src,'ajax-loader.gif')]")));
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", $(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES+"["+index+"]"));
-        $(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES+"["+index+"]").click();
-        invoiceLine.setCatalogName($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[3])"+"["+index+"]").getText());
-        invoiceLine.setQty($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[4])"+"["+index+"]").getText());
-        invoiceLine.setReturnable($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[5])"+"["+index+"]").getText());
+        InvoiceLine invoiceLine = new InvoiceLine();
+        utils.waitInvisabilityOfSpinner();
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", $(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES + "[" + index + "]"));
+        $(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES + "[" + index + "]").click();
+        invoiceLine.setCatalogName($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[3])" + "[" + index + "]").getText());
+        invoiceLine.setQty($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[4])" + "[" + index + "]").getText());
+        invoiceLine.setReturnable($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[5])" + "[" + index + "]").getText());
         invoiceLine.setCheckedForRequest(true);
 
         return invoiceLine;
@@ -111,14 +113,32 @@ public class AllRequestsPage extends PageObject {
     }
 
     public List<InvoiceLine> selectAllProductFromRequestedList() {
-        List<InvoiceLine> invoiceLines=new ArrayList<>();
-        for(int i=1;i<=findAll(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES).size();i++) {
+        List<InvoiceLine> invoiceLines = new ArrayList<>();
+        for (int i = 1; i <= findAll(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES).size(); i++) {
             invoiceLines.add(selectProductFromRequestedList(Integer.toString(i)));
         }
         return invoiceLines;
     }
 
     public List<String> getInvoiceProductsNames() {
-        return (new Utils()).getTextFromList(findAll(STEP_1_ALL_NAMES_OF_PRODUCT_LIST_FOR_INVOICES));
+        return utils.getTextFromList(findAll(STEP_1_ALL_NAMES_OF_PRODUCT_LIST_FOR_INVOICES));
+    }
+
+
+    public void selectFromReasonForRequest(String reason, String index) {
+        $(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+index+"]").click();
+        moveTo("(//ul[@class='return-type-dropdown-list'])[1]//li/a[.='"+reason+"']").click();
+    }
+
+    public void selectRequestedTypeForProductInLine(String requestedType, String lineIndex) {
+        moveTo("(//ul[@class='return-type-dropdown-list'])[1]//li/a[.='"+requestedType+"']"+"["+lineIndex+"]").click();
+    }
+
+    public void selectRequestedSubTypeForProductInLine(String requestedSubType, String lineIndex) {
+        moveTo("(//ul[@class='return-type-dropdown-list'])[1]//li/a[.='"+requestedSubType+"']"+"["+lineIndex+"]").click();
+    }
+
+    public void selectRequestedActionForProductInLine(String requestedAction, String lineIndex) {
+
     }
 }

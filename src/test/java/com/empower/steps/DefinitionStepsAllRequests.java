@@ -79,4 +79,24 @@ public class DefinitionStepsAllRequests {
     public void invoiceShouldContainProduct(String productName) {
         allRequestsSteps.isInvoiceContains(productName);
     }
+
+    @Then("^Select \"([^\"]*)\" from Reason for Request drop-down for Product in line \"([^\"]*)\"$")
+    public void selectFromReasonForRequestDropDownOfProductInLine(String reason, String index) {
+        allRequestsSteps.selectFromReasonForRequestDropDownOfProductInLine(reason, index);
+    }
+
+    @Then("^Select value \"([^\"]*)\" for Requested Type product in line \"([^\"]*)\"$")
+    public void selectValueForRequestedTypeProductInLine(String requestedType, String lineIndex){
+       allRequestsSteps.selectRequestedTypeForProductInLine(requestedType, lineIndex);
+    }
+
+    @Then("^Select Requested Sub Type value \"([^\"]*)\" for Product in line \"([^\"]*)\"$")
+    public void selectRequestedSubTypeValueForProductInLine(String requestedSubType, String lineIndex) {
+        allRequestsSteps.selectRequestedSubTypeForProductInLine(requestedSubType,lineIndex);
+    }
+
+    @Then("^Select Requested Action \"([^\"]*)\" for Product in line \"([^\"]*)\"$")
+    public void selectRequestedActionForProductInLine(String requestedAction, String lineIndex) {
+       allRequestsSteps.selectRequestedActionForProductInLine(requestedAction,lineIndex);
+    }
 }
