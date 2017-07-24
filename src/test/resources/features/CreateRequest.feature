@@ -29,10 +29,8 @@ Feature: Request creation
     Then Reason for Request step should contain all selected products from Step 1
     Then All Qty label on Reason for Request step should contain appropriate values from Step 1
     Then All Next buttons should be inactive
-    Then Select "Defective" from Reason for Request drop-down for Product in line "1"
-    Then Select value "Cosmetic" for Requested Type product in line "1"
-    Then Select Requested Sub Type value "Product" for Product in line "1"
-    Then Select Requested Action "Return & Repair" for Product in line "1"
+    Then Select Reason for Request "Defective" >> Requested Type "Cosmetic" >> Requested Sub Type "Product" for all products
+    Then Select Requested Action "Return & Repair" for all products
 
 
 

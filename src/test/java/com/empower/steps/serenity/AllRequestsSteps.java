@@ -122,4 +122,8 @@ public class AllRequestsSteps {
     public void selectRequestedActionForProductInLine(String requestedAction, String lineIndex) {
         allRequestsPage.selectRequestedActionForProductInLine(requestedAction,lineIndex);
     }
+    @Step
+    public void selectReasonForRequestForAllProducts(String reasonForRequest, String requestedType, String requestedSubType) {
+        invoicesForRequest.size();
+    }
 }

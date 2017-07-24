@@ -58,11 +58,10 @@ public class AllRequestsPage extends PageObject {
 
     public Invoice selectInvoicefromSearchResults(String lineNumber) {
         Invoice invoice = new Invoice();
+        waitABit(5000);
+        ((JavascriptExecutor)getDriver()).executeScript("scroll(0,-10000);");
         (new WebDriverWait(getDriver(), 10)).until(ExpectedConditions.elementToBeClickable(org.openqa.selenium.By.xpath(ALL_ARROW_ICON + "[" + lineNumber + "]")));
         (new Actions(getDriver())).moveToElement(findBy(ALL_ARROW_ICON + "[" + lineNumber + "]"));
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", $(ALL_ARROW_ICON + "[" + lineNumber + "]"));
-        (new WebDriverWait(getDriver(),5)).until(ExpectedConditions.elementToBeClickable(By.xpath(ALL_ARROW_ICON + "[" + lineNumber + "]")));
-        ((JavascriptExecutor)getDriver()).executeScript("scroll(0,-1000);");
         $(ALL_ARROW_ICON + "[" + lineNumber + "]").click();
 
         invoice.setNumber($("(.//table[@id='return-invoice-table']//tr/td[1])" + "[" + lineNumber + "]").getText());
@@ -146,4 +145,6 @@ public class AllRequestsPage extends PageObject {
     public void selectRequestedActionForProductInLine(String requestedAction, String lineIndex) {
 
     }
+
+
 }

@@ -99,4 +99,9 @@ public class DefinitionStepsAllRequests {
     public void selectRequestedActionForProductInLine(String requestedAction, String lineIndex) {
        allRequestsSteps.selectRequestedActionForProductInLine(requestedAction,lineIndex);
     }
+
+    @Then("^Select Reason for Request \"([^\"]*)\" >> Requested Type \"([^\"]*)\" >> Requested Sub Type \"([^\"]*)\" for all products$")
+    public void selectReasonForRequestRequestedTypeRequestedSubTypeForAllProducts(String reasonForRequest, String requestedType, String requestedSubType) throws Throwable {
+        allRequestsSteps.selectReasonForRequestForAllProducts(reasonForRequest, requestedType, requestedSubType);
+    }
 }
