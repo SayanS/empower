@@ -45,7 +45,7 @@ public class AllRequestsPage extends PageObject {
         $(SEARCH_FIELD).clear();
         $(SEARCH_FIELD).sendKeys(value);
         $(GO_BUTTON).click();
-
+        (new WebDriverWait(getDriver(), 10)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(".//*[@id='return-invoice-table']/tbody/tr[1]/td[1]")));
     }
 
     public WebElementFacade getTopNextButton() {
@@ -58,9 +58,11 @@ public class AllRequestsPage extends PageObject {
 
     public Invoice selectInvoicefromSearchResults(String lineNumber) {
         Invoice invoice = new Invoice();
-        (new WebDriverWait(getDriver(), 10000)).until(ExpectedConditions.presenceOfElementLocated(org.openqa.selenium.By.xpath(ALL_ARROW_ICON + "[" + lineNumber + "]")));
+        (new WebDriverWait(getDriver(), 10)).until(ExpectedConditions.elementToBeClickable(org.openqa.selenium.By.xpath(ALL_ARROW_ICON + "[" + lineNumber + "]")));
         (new Actions(getDriver())).moveToElement(findBy(ALL_ARROW_ICON + "[" + lineNumber + "]"));
         ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", $(ALL_ARROW_ICON + "[" + lineNumber + "]"));
+        (new WebDriverWait(getDriver(),5)).until(ExpectedConditions.elementToBeClickable(By.xpath(ALL_ARROW_ICON + "[" + lineNumber + "]")));
+        ((JavascriptExecutor)getDriver()).executeScript("scroll(0,-1000);");
         $(ALL_ARROW_ICON + "[" + lineNumber + "]").click();
 
         invoice.setNumber($("(.//table[@id='return-invoice-table']//tr/td[1])" + "[" + lineNumber + "]").getText());
@@ -73,6 +75,8 @@ public class AllRequestsPage extends PageObject {
 
 
     public String getColorOfArrowIcon(String line) {
+      // (new WebDriverWait(getDriver(),20)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("(.//input[@class='invoice-line-check-box'])[1]")));
+        waitABit(5000);
         return $(ALL_ARROW_ICON + "[" + line + "]").getCssValue("color");
     }
 
@@ -98,7 +102,7 @@ public class AllRequestsPage extends PageObject {
     public InvoiceLine selectProductFromRequestedList(String index) {
         InvoiceLine invoiceLine = new InvoiceLine();
         utils.waitInvisabilityOfSpinner();
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView();", $(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES + "[" + index + "]"));
+        ((JavascriptExecutor) getDriver()).executeScript("scroll(0,-1000)");
         $(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES + "[" + index + "]").click();
         invoiceLine.setCatalogName($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[3])" + "[" + index + "]").getText());
         invoiceLine.setQty($("(.//table[@id='return-invoice-line-table']/tbody/tr/td[4])" + "[" + index + "]").getText());
@@ -114,6 +118,7 @@ public class AllRequestsPage extends PageObject {
 
     public List<InvoiceLine> selectAllProductFromRequestedList() {
         List<InvoiceLine> invoiceLines = new ArrayList<>();
+        (new WebDriverWait(getDriver(),100)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(.//tbody/tr//td[contains(@class,'line-number')])[1]")));
         for (int i = 1; i <= findAll(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES).size(); i++) {
             invoiceLines.add(selectProductFromRequestedList(Integer.toString(i)));
         }

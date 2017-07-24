@@ -27,6 +27,7 @@ public class AccountManagementPage extends PageObject {
     }
 
     public void selectAccountFromSearchResults(String accountName, String salesOrg) {
+       (new WebDriverWait(getDriver(),5)).until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@id='FullScreenProgressIndicatorModalDialog']")));
        findBy(ACCOUNT_NAME_WITH_SALES_ORG_IN_SEARCH_RESULTS.replace("$accountName",accountName).replace("$salesOrg",salesOrg)).click();
     }
 }
