@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Utils extends PageObject {
+public class Utils extends CustomPageObject {
 
     public List<String> getTextFromList(List<WebElementFacade> list){
         List<String> textList=new ArrayList<>();

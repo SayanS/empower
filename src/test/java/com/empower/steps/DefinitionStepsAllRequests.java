@@ -104,4 +104,9 @@ public class DefinitionStepsAllRequests {
     public void selectReasonForRequestRequestedTypeRequestedSubTypeForAllProducts(String reasonForRequest, String requestedType, String requestedSubType) throws Throwable {
         allRequestsSteps.selectReasonForRequestForAllProducts(reasonForRequest, requestedType, requestedSubType);
     }
+
+    @Then("^Select Reason for Request \"([^\"]*)\" >> Requested Type \"([^\"]*)\" for all products$")
+    public void selectReasonForRequestRequestedTypeForAllProducts(String reasonForRequest, String requestedType) {
+        allRequestsSteps.selectReasonForRequestForAllProducts(reasonForRequest, requestedType);
+    }
 }

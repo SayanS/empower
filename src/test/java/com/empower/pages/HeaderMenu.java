@@ -8,7 +8,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class HeaderMenu extends PageObject {
+public class HeaderMenu extends CustomPageObject {
     private String HOME = ".//div[@id='navbar']//li/a[.='Home']";
     private String MY_CART = ".//div[@id='navbar']//li/a[.='My Cart']";
     private String ORDER_STATUS = ".//div[@id='navbar']//li/a[.='Order Status']";

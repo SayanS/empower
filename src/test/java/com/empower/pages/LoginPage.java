@@ -4,7 +4,7 @@ import net.serenitybdd.core.pages.PageObject;
 import net.thucydides.core.annotations.DefaultUrl;
 
 @DefaultUrl("https://qa.geempower.com/geempower")
-public class LoginPage extends PageObject{
+public class LoginPage extends CustomPageObject{
     private String User_ID=".//input[@id='userId']";
     private String PASSWORD=".//*[@id='password']";
     private String SUBMIT_BUTTON="//button[@type='submit']";

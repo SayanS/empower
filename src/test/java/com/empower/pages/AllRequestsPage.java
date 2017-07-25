@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllRequestsPage extends PageObject {
+public class AllRequestsPage extends CustomPageObject{
     private Utils utils;
 
     private String CREATE_REQUEST_BUTTON = ".//button[@id='create_request']";
@@ -146,5 +146,37 @@ public class AllRequestsPage extends PageObject {
 
     }
 
+    public Integer getAmountOfProductsStep_2() {
+        return findAll("//td[@class='invoice-number']").size();
+    }
+
+
+    public void selectReasonForRequestForProductInLine(Integer line, String reasonForRequest, String requestedType, String requestedSubType) {
+
+        $(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]").click();
+
+        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]")));
+        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]").click();
+
+        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='Defective'])["+line+"]/following-sibling::div/ul/li[1]");
+        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td[@class='reason-request-col']//ul/li/a[.='"+requestedType+"'])["+line+"]")));
+        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+requestedType+"'])["+line+"]").click();
+
+        moveTo("((.//*[@id='returnTrackingTableStep2']/tbody//tr)[1]//a[@data-name='"+reasonForRequest+"']/ancestor::li//a[@data-name='"+requestedType+"']/ancestor::li[1]//a[@name='subtype'])["+line+"]");
+        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td//p[.='Request Sub Type']/ancestor::div/ul/li/a[.='"+requestedType+"'])["+line+"]/following-sibling::div/ul/li/a[.='"+requestedSubType+"']")));
+        moveTo("(.//td//p[.='Request Sub Type']/ancestor::div/ul/li/a[.='"+requestedType+"'])["+line+"]/following-sibling::div/ul/li/a[.='"+requestedSubType+"']").click();
+    }
+
+    public void selectReasonForRequestForProductInLine(Integer line, String reasonForRequest, String requestedType) {
+        ((JavascriptExecutor)getDriver()).executeScript("scroll(0,-10000);");
+        $(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]").click();
+
+        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]")));
+        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]").click();
+
+        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='Defective'])["+line+"]/following-sibling::div/ul/li[1]");
+        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td[@class='reason-request-col']//ul/li/a[.='"+requestedType+"'])["+line+"]")));
+        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+requestedType+"'])["+line+"]").click();
+    }
 
 }

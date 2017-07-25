@@ -124,6 +124,14 @@ public class AllRequestsSteps {
     }
     @Step
     public void selectReasonForRequestForAllProducts(String reasonForRequest, String requestedType, String requestedSubType) {
-        invoicesForRequest.size();
+        for(int i=1;i<=allRequestsPage.getAmountOfProductsStep_2();i++){
+            allRequestsPage.selectReasonForRequestForProductInLine(i, reasonForRequest, requestedType, requestedSubType);
+        }
+    }
+    @Step
+    public void selectReasonForRequestForAllProducts(String reasonForRequest, String requestedType) {
+        for(int i=1;i<=allRequestsPage.getAmountOfProductsStep_2();i++){
+            allRequestsPage.selectReasonForRequestForProductInLine(i, reasonForRequest, requestedType);
+        }
     }
 }
