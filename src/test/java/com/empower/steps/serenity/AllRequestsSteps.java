@@ -12,7 +12,7 @@ import java.util.*;
 public class AllRequestsSteps {
     private AllRequestsPage allRequestsPage;
     private List<Invoice> invoicesForRequest = new ArrayList<>();
-    private List<InvoiceLine> actualCatalogNamesLabelQty=new ArrayList<>();
+    private List<InvoiceLine> actualCatalogNamesLabelQty = new ArrayList<>();
     List<InvoiceLine> expectedInvoicesLines = new ArrayList<>();
 
     @Step
@@ -33,7 +33,7 @@ public class AllRequestsSteps {
 
     @Step
     public void isColorOfArrowIconInLine(String expectedColor, String line) {
-            Assert.assertEquals("The color of Arrow icon isn't " + expectedColor + " in line " + line, expectedColor, allRequestsPage.getColorOfArrowIcon(line));
+        Assert.assertEquals("The color of Arrow icon isn't " + expectedColor + " in line " + line, expectedColor, allRequestsPage.getColorOfArrowIcon(line));
     }
 
     @Step
@@ -57,30 +57,30 @@ public class AllRequestsSteps {
         }
         Collections.sort(expectedInvoicesLines, new InvoiceLine());
 
-        actualCatalogNamesLabelQty=allRequestsPage.getAllCatalogNameAndQtyLabelFromReasonForRequestStep();
+        actualCatalogNamesLabelQty = allRequestsPage.getAllCatalogNameAndQtyLabelFromReasonForRequestStep();
         Collections.sort(actualCatalogNamesLabelQty, new InvoiceLine());
 
-       for(int i=0;i<expectedInvoicesLines.size()-1;i++) {
-           Assert.assertEquals("List of Products from Step 2 isn't equals to List on Step1 "+actualCatalogNamesLabelQty.get(i).getCatalogName()+" "+" "+expectedInvoicesLines.get(i).getCatalogName() , expectedInvoicesLines.get(i).getCatalogName(), actualCatalogNamesLabelQty.get(i).getCatalogName());
-       }
+        for (int i = 0; i < expectedInvoicesLines.size() - 1; i++) {
+            Assert.assertEquals("List of Products from Step 2 isn't equals to List on Step1 " + actualCatalogNamesLabelQty.get(i).getCatalogName() + " " + " " + expectedInvoicesLines.get(i).getCatalogName(), expectedInvoicesLines.get(i).getCatalogName(), actualCatalogNamesLabelQty.get(i).getCatalogName());
+        }
     }
 
     @Step
     public void isAllQtyLabelOnReasonForRequestStepContainAppropriateValuesFromStep1() {
-        List<String> actualUnitedCatalogNamesLabelQty=new ArrayList<>();
-        List<String> expectedUnitedCatalogNamesLabelQty=new ArrayList<>();
-        for(InvoiceLine invoiceLine:actualCatalogNamesLabelQty){
-            actualUnitedCatalogNamesLabelQty.add(invoiceLine.getCatalogName()+" "+invoiceLine.getLabelQty());
+        List<String> actualUnitedCatalogNamesLabelQty = new ArrayList<>();
+        List<String> expectedUnitedCatalogNamesLabelQty = new ArrayList<>();
+        for (InvoiceLine invoiceLine : actualCatalogNamesLabelQty) {
+            actualUnitedCatalogNamesLabelQty.add(invoiceLine.getCatalogName() + " " + invoiceLine.getLabelQty());
         }
         Collections.sort(actualUnitedCatalogNamesLabelQty);
 
-        for(InvoiceLine invoiceLine:expectedInvoicesLines){
-            expectedUnitedCatalogNamesLabelQty.add(invoiceLine.getCatalogName()+" "+invoiceLine.getQty());
+        for (InvoiceLine invoiceLine : expectedInvoicesLines) {
+            expectedUnitedCatalogNamesLabelQty.add(invoiceLine.getCatalogName() + " " + invoiceLine.getQty());
         }
         Collections.sort(expectedUnitedCatalogNamesLabelQty);
 
-        for(int i=0;i<=expectedInvoicesLines.size();i++) {
-                Assert.assertEquals("Qty from step 2 is mismatched to Qty from step 1 ", actualUnitedCatalogNamesLabelQty, expectedUnitedCatalogNamesLabelQty);
+        for (int i = 0; i <= expectedInvoicesLines.size(); i++) {
+            Assert.assertEquals("Qty from step 2 is mismatched to Qty from step 1 ", actualUnitedCatalogNamesLabelQty, expectedUnitedCatalogNamesLabelQty);
 
         }
     }
@@ -89,49 +89,74 @@ public class AllRequestsSteps {
     public void selectInvoicefromSearchResults(String lineNumber) {
         invoicesForRequest.add(new Invoice(allRequestsPage.selectInvoicefromSearchResults(lineNumber)));
     }
+
     @Step
     public void selectProductFromRequestedList(String index) {
-        invoicesForRequest.get(invoicesForRequest.size()-1).addInvoiceLine(allRequestsPage.selectProductFromRequestedList(index));
+        invoicesForRequest.get(invoicesForRequest.size() - 1).addInvoiceLine(allRequestsPage.selectProductFromRequestedList(index));
     }
+
     @Step
     public void selectLastProductFromRequestedList() {
-        invoicesForRequest.get(invoicesForRequest.size()-1).addInvoiceLine(allRequestsPage.selectLastProductFromRequestedList());
+        invoicesForRequest.get(invoicesForRequest.size() - 1).addInvoiceLine(allRequestsPage.selectLastProductFromRequestedList());
     }
 
     @Step
     public void selectAllProductFromRequestedList() {
-        invoicesForRequest.get(invoicesForRequest.size()-1).setLines(allRequestsPage.selectAllProductFromRequestedList());
+        invoicesForRequest.get(invoicesForRequest.size() - 1).setLines(allRequestsPage.selectAllProductFromRequestedList());
     }
+
     @Step
     public void isInvoiceContains(String productName) {
-        Assert.assertTrue("Invoice isn't contain "+productName+" product in "+ allRequestsPage.getInvoiceProductsNames().toString(),allRequestsPage.getInvoiceProductsNames().contains(productName));
+        Assert.assertTrue("Invoice isn't contain " + productName + " product in " + allRequestsPage.getInvoiceProductsNames().toString(), allRequestsPage.getInvoiceProductsNames().contains(productName));
     }
+
     @Step
     public void selectFromReasonForRequestDropDownOfProductInLine(String reason, String index) {
         allRequestsPage.selectFromReasonForRequest(reason, index);
     }
+
     @Step
     public void selectRequestedTypeForProductInLine(String requestedType, String lineIndex) {
-        allRequestsPage.selectRequestedTypeForProductInLine(requestedType,lineIndex);
+        allRequestsPage.selectRequestedTypeForProductInLine(requestedType, lineIndex);
     }
+
     @Step
     public void selectRequestedSubTypeForProductInLine(String requestedSubType, String lineIndex) {
         allRequestsPage.selectRequestedSubTypeForProductInLine(requestedSubType, lineIndex);
     }
+
     @Step
     public void selectRequestedActionForProductInLine(String requestedAction, String lineIndex) {
-        allRequestsPage.selectRequestedActionForProductInLine(requestedAction,lineIndex);
+        allRequestsPage.selectRequestedActionForProductInLine(requestedAction, lineIndex);
     }
+
     @Step
     public void selectReasonForRequestForAllProducts(String reasonForRequest, String requestedType, String requestedSubType) {
-        for(int i=1;i<=allRequestsPage.getAmountOfProductsStep_2();i++){
+        for (int i = 1; i <= allRequestsPage.getAmountOfProductsStep_2(); i++) {
             allRequestsPage.selectReasonForRequestForProductInLine(i, reasonForRequest, requestedType, requestedSubType);
         }
     }
+
     @Step
     public void selectReasonForRequestForAllProducts(String reasonForRequest, String requestedType) {
-        for(int i=1;i<=allRequestsPage.getAmountOfProductsStep_2();i++){
+        for (int i = 1; i <= allRequestsPage.getAmountOfProductsStep_2(); i++) {
             allRequestsPage.selectReasonForRequestForProductInLine(i, reasonForRequest, requestedType);
+        }
+    }
+
+    @Step
+    public void selectReasonForRequestForAllProducts(String reasonForRequest) {
+        for (int i = 1; i <= allRequestsPage.getAmountOfProductsStep_2(); i++) {
+            allRequestsPage.selectReasonForRequestForProductInLine(i, reasonForRequest);
+        }
+    }
+
+    @Step
+    public void selectRequestedActionForAllProducts(String requestedAction) {
+        for (Invoice invoice:invoicesForRequest) {
+            for(InvoiceLine product:invoice.getLines()) {
+                allRequestsPage.selectRequestedAction(invoice.getNumber(),product.getCatalogName(),requestedAction);
+            }
         }
     }
 }

@@ -152,31 +152,50 @@ public class AllRequestsPage extends CustomPageObject{
 
 
     public void selectReasonForRequestForProductInLine(Integer line, String reasonForRequest, String requestedType, String requestedSubType) {
-
+        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]")));
         $(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]").click();
 
         ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]")));
         moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]").click();
 
-        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='Defective'])["+line+"]/following-sibling::div/ul/li[1]");
+        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]/following-sibling::div/ul/li[1]");
         ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td[@class='reason-request-col']//ul/li/a[.='"+requestedType+"'])["+line+"]")));
         moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+requestedType+"'])["+line+"]").click();
 
-        moveTo("((.//*[@id='returnTrackingTableStep2']/tbody//tr)[1]//a[@data-name='"+reasonForRequest+"']/ancestor::li//a[@data-name='"+requestedType+"']/ancestor::li[1]//a[@name='subtype'])["+line+"]");
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td//p[.='Request Sub Type']/ancestor::div/ul/li/a[.='"+requestedType+"'])["+line+"]/following-sibling::div/ul/li/a[.='"+requestedSubType+"']")));
+        moveTo("(.//*[@id='returnTrackingTableStep2']/tbody//tr)[1]//a[@data-name='"+requestedType+"']/ancestor::li[1]//ul/li[1]/a");
+        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//*[@id='returnTrackingTableStep2']/tbody//tr)["+line+"]//a[@data-name='"+requestedType+"']/ancestor::li[1]//ul/li/a[.='"+requestedSubType+"']")));
         moveTo("(.//td//p[.='Request Sub Type']/ancestor::div/ul/li/a[.='"+requestedType+"'])["+line+"]/following-sibling::div/ul/li/a[.='"+requestedSubType+"']").click();
+        (new WebDriverWait(getDriver(),5)).until(ExpectedConditions.elementToBeClickable(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]")));
     }
 
     public void selectReasonForRequestForProductInLine(Integer line, String reasonForRequest, String requestedType) {
-        ((JavascriptExecutor)getDriver()).executeScript("scroll(0,-10000);");
+        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]")));
         $(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]").click();
 
         ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]")));
         moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]").click();
 
-        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='Defective'])["+line+"]/following-sibling::div/ul/li[1]");
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td[@class='reason-request-col']//ul/li/a[.='"+requestedType+"'])["+line+"]")));
-        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+requestedType+"'])["+line+"]").click();
+        moveTo("(//table[@id='returnTrackingTableStep2']/tbody/tr)["+line+"]/td[3]//a[@data-name='"+reasonForRequest+"']/ancestor::li//ul/li[1]/a");
+        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath(
+                "(//table[@id='returnTrackingTableStep2']/tbody/tr)["+line+"]/td[3]//a[@data-name='"+reasonForRequest+"']/ancestor::li//ul/li/a[.='"+requestedType+"']")));
+        moveTo("(//table[@id='returnTrackingTableStep2']/tbody/tr)["+line+"]/td[3]//a[@data-name='"+reasonForRequest+"']/ancestor::li//ul/li/a[.='"+requestedType+"']").click();
+        (new WebDriverWait(getDriver(),5)).until(ExpectedConditions.elementToBeClickable(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]")));
+    }
+
+    public void selectReasonForRequestForProductInLine(Integer line, String reasonForRequest) {
+        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]")));
+        $(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]").click();
+
+        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(//table[@id='returnTrackingTableStep2']/tbody/tr)["+line+"]/td[3]//div[@class='dropdown-menu reason-request']/ul/li/a[.='"+reasonForRequest+"']")));
+        moveTo("(//table[@id='returnTrackingTableStep2']/tbody/tr)["+line+"]/td[3]//div[@class='dropdown-menu reason-request']/ul/li/a[.='"+reasonForRequest+"']").click();
+        (new WebDriverWait(getDriver(),5)).until(ExpectedConditions.elementToBeClickable(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]")));
+    }
+
+    public void selectRequestedAction(String invoice, String product, String requestedAction){
+        String requestedActionDropDown=".//input[@name='invoiceNumber' and contains(@value,'"+invoice+"')]/ancestor::td[contains(text(),'"+product+"')]/following-sibling::td/div[@class='return-type']";
+        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);",$(requestedActionDropDown));
+        moveTo(requestedActionDropDown).click();
+        moveTo("//ul[@class='select2-results__options']/li[.='"+requestedAction+"']").click();
     }
 
 }

@@ -109,4 +109,14 @@ public class DefinitionStepsAllRequests {
     public void selectReasonForRequestRequestedTypeForAllProducts(String reasonForRequest, String requestedType) {
         allRequestsSteps.selectReasonForRequestForAllProducts(reasonForRequest, requestedType);
     }
+
+    @Then("^Select Reason for Request \"([^\"]*)\"$")
+    public void selectReasonForRequest(String reasonForRequest)  {
+        allRequestsSteps.selectReasonForRequestForAllProducts(reasonForRequest);
+    }
+
+    @Then("^Select Requested Action \"([^\"]*)\" for all products$")
+    public void selectRequestedActionForAllProducts(String requestedAction) {
+        allRequestsSteps.selectRequestedActionForAllProducts(requestedAction);
+    }
 }
