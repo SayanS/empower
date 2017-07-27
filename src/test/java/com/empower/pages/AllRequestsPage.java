@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllRequestsPage extends CustomPageObject{
+public class AllRequestsPage extends CustomPageObject {
     private Utils utils;
 
     private String CREATE_REQUEST_BUTTON = ".//button[@id='create_request']";
@@ -27,8 +27,11 @@ public class AllRequestsPage extends CustomPageObject{
     private String STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES = "(.//tbody/tr//label[contains(@class,'myCheckbox')])";
     private String STEP_1_ALL_NAMES_OF_PRODUCT_LIST_FOR_INVOICES = "(.//table[@id='return-invoice-line-table']/tbody/tr/td[3])";
     private String STEP_2_ALL_CATALOG = "(.//table[@id='returnTrackingTableStep2']/tbody/tr/td[1])";
-    private String STEP_2_REASON_FOR_REQUEST_DROPDOWN="(.//td[@class='reason-request-col']//div[@data-toggle='dropdown'])";
-    private String STEP_2_REQUEST_ACTION_DROPDOWN="(.//td[@class='request-action-col']//select)";
+    private String STEP_2_REASON_FOR_REQUEST_DROPDOWN = "(.//td[@class='reason-request-col']//div[@data-toggle='dropdown'])";
+    private String STEP_2_REQUEST_ACTION_DROPDOWN = "(.//td[@class='request-action-col']//select)";
+    private String REQUESTED_ACTION_DROPDOWN = ".//input[@name='invoiceNumber' and contains(@value,'$invoice')]/ancestor::td[contains(text(),'$product')]/following-sibling::td/div[@class='return-type']";
+    private String REQUESTED_ACTION_DROPDOWN_VALUE = "//ul[@class='select2-results__options']/li[.='$requestedAction']";
+    private String REASON_FOR_REQUEST_DROPDOWN = ".//input[@name='invoiceNumber' and contains(@value,'$invoice')]/ancestor::td[contains(text(),'$product')]/following-sibling::td[@class='reason-request-col']";
 
 
     public void clickOnCreateRequestButton() {
@@ -59,7 +62,7 @@ public class AllRequestsPage extends CustomPageObject{
     public Invoice selectInvoicefromSearchResults(String lineNumber) {
         Invoice invoice = new Invoice();
         waitABit(5000);
-        ((JavascriptExecutor)getDriver()).executeScript("scroll(0,-10000);");
+        ((JavascriptExecutor) getDriver()).executeScript("scroll(0,-10000);");
         (new WebDriverWait(getDriver(), 10)).until(ExpectedConditions.elementToBeClickable(org.openqa.selenium.By.xpath(ALL_ARROW_ICON + "[" + lineNumber + "]")));
         (new Actions(getDriver())).moveToElement(findBy(ALL_ARROW_ICON + "[" + lineNumber + "]"));
         $(ALL_ARROW_ICON + "[" + lineNumber + "]").click();
@@ -74,7 +77,7 @@ public class AllRequestsPage extends CustomPageObject{
 
 
     public String getColorOfArrowIcon(String line) {
-      // (new WebDriverWait(getDriver(),20)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("(.//input[@class='invoice-line-check-box'])[1]")));
+        // (new WebDriverWait(getDriver(),20)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("(.//input[@class='invoice-line-check-box'])[1]")));
         waitABit(5000);
         return $(ALL_ARROW_ICON + "[" + line + "]").getCssValue("color");
     }
@@ -86,10 +89,10 @@ public class AllRequestsPage extends CustomPageObject{
 
     public List<InvoiceLine> getAllCatalogNameAndQtyLabelFromReasonForRequestStep() {
         List<InvoiceLine> catalogNames = new ArrayList<>();
-        for (int i = 1; i <= getDriver().findElements(By.xpath(STEP_2_ALL_CATALOG)).size() ; i++) {
+        for (int i = 1; i <= getDriver().findElements(By.xpath(STEP_2_ALL_CATALOG)).size(); i++) {
             catalogNames.add(new InvoiceLine());
-            catalogNames.get(i-1).setCatalogName(findBy(STEP_2_ALL_CATALOG + "[" + i + "]").getText());
-            catalogNames.get(i-1).setLabelQty(findBy("(.//table[@id='returnTrackingTableStep2']//span[contains(@class,'reason-qty-text')])" + "[" + i + "]").getText().replace("of ", ""));
+            catalogNames.get(i - 1).setCatalogName(findBy(STEP_2_ALL_CATALOG + "[" + i + "]").getText());
+            catalogNames.get(i - 1).setLabelQty(findBy("(.//table[@id='returnTrackingTableStep2']//span[contains(@class,'reason-qty-text')])" + "[" + i + "]").getText().replace("of ", ""));
         }
         return catalogNames;
     }
@@ -117,7 +120,7 @@ public class AllRequestsPage extends CustomPageObject{
 
     public List<InvoiceLine> selectAllProductFromRequestedList() {
         List<InvoiceLine> invoiceLines = new ArrayList<>();
-        (new WebDriverWait(getDriver(),100)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(.//tbody/tr//td[contains(@class,'line-number')])[1]")));
+        (new WebDriverWait(getDriver(), 100)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(.//tbody/tr//td[contains(@class,'line-number')])[1]")));
         for (int i = 1; i <= findAll(STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES).size(); i++) {
             invoiceLines.add(selectProductFromRequestedList(Integer.toString(i)));
         }
@@ -130,16 +133,16 @@ public class AllRequestsPage extends CustomPageObject{
 
 
     public void selectFromReasonForRequest(String reason, String index) {
-        $(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+index+"]").click();
-        moveTo("(//ul[@class='return-type-dropdown-list'])[1]//li/a[.='"+reason+"']").click();
+        $(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + index + "]").click();
+        moveTo("(//ul[@class='return-type-dropdown-list'])[1]//li/a[.='" + reason + "']").click();
     }
 
     public void selectRequestedTypeForProductInLine(String requestedType, String lineIndex) {
-        moveTo("(//ul[@class='return-type-dropdown-list'])[1]//li/a[.='"+requestedType+"']"+"["+lineIndex+"]").click();
+        moveTo("(//ul[@class='return-type-dropdown-list'])[1]//li/a[.='" + requestedType + "']" + "[" + lineIndex + "]").click();
     }
 
     public void selectRequestedSubTypeForProductInLine(String requestedSubType, String lineIndex) {
-        moveTo("(//ul[@class='return-type-dropdown-list'])[1]//li/a[.='"+requestedSubType+"']"+"["+lineIndex+"]").click();
+        moveTo("(//ul[@class='return-type-dropdown-list'])[1]//li/a[.='" + requestedSubType + "']" + "[" + lineIndex + "]").click();
     }
 
     public void selectRequestedActionForProductInLine(String requestedAction, String lineIndex) {
@@ -152,50 +155,48 @@ public class AllRequestsPage extends CustomPageObject{
 
 
     public void selectReasonForRequestForProductInLine(Integer line, String reasonForRequest, String requestedType, String requestedSubType) {
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]")));
-        $(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]").click();
-
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]")));
-        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]").click();
-
-        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]/following-sibling::div/ul/li[1]");
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td[@class='reason-request-col']//ul/li/a[.='"+requestedType+"'])["+line+"]")));
-        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+requestedType+"'])["+line+"]").click();
-
-        moveTo("(.//*[@id='returnTrackingTableStep2']/tbody//tr)[1]//a[@data-name='"+requestedType+"']/ancestor::li[1]//ul/li[1]/a");
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//*[@id='returnTrackingTableStep2']/tbody//tr)["+line+"]//a[@data-name='"+requestedType+"']/ancestor::li[1]//ul/li/a[.='"+requestedSubType+"']")));
-        moveTo("(.//td//p[.='Request Sub Type']/ancestor::div/ul/li/a[.='"+requestedType+"'])["+line+"]/following-sibling::div/ul/li/a[.='"+requestedSubType+"']").click();
-        (new WebDriverWait(getDriver(),5)).until(ExpectedConditions.elementToBeClickable(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]")));
-    }
-
-    public void selectReasonForRequestForProductInLine(Integer line, String reasonForRequest, String requestedType) {
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]")));
-        $(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]").click();
-
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]")));
-        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='"+reasonForRequest+"'])["+line+"]").click();
-
-        moveTo("(//table[@id='returnTrackingTableStep2']/tbody/tr)["+line+"]/td[3]//a[@data-name='"+reasonForRequest+"']/ancestor::li//ul/li[1]/a");
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath(
-                "(//table[@id='returnTrackingTableStep2']/tbody/tr)["+line+"]/td[3]//a[@data-name='"+reasonForRequest+"']/ancestor::li//ul/li/a[.='"+requestedType+"']")));
-        moveTo("(//table[@id='returnTrackingTableStep2']/tbody/tr)["+line+"]/td[3]//a[@data-name='"+reasonForRequest+"']/ancestor::li//ul/li/a[.='"+requestedType+"']").click();
-        (new WebDriverWait(getDriver(),5)).until(ExpectedConditions.elementToBeClickable(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]")));
-    }
-
-    public void selectReasonForRequestForProductInLine(Integer line, String reasonForRequest) {
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]")));
+        scrollIntoView(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]");
         $(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]").click();
 
-        ((JavascriptExecutor) getDriver()).executeScript("arguments[0].scrollIntoView(true);", getDriver().findElement(By.xpath("(//table[@id='returnTrackingTableStep2']/tbody/tr)["+line+"]/td[3]//div[@class='dropdown-menu reason-request']/ul/li/a[.='"+reasonForRequest+"']")));
-        moveTo("(//table[@id='returnTrackingTableStep2']/tbody/tr)["+line+"]/td[3]//div[@class='dropdown-menu reason-request']/ul/li/a[.='"+reasonForRequest+"']").click();
-        (new WebDriverWait(getDriver(),5)).until(ExpectedConditions.elementToBeClickable(By.xpath(STEP_2_REASON_FOR_REQUEST_DROPDOWN+"["+line+"]")));
+        scrollIntoView("(.//td[@class='reason-request-col']//ul/li/a[.='" + reasonForRequest + "'])[" + line + "]");
+        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='" + reasonForRequest + "'])[" + line + "]").click();
+
+        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='" + reasonForRequest + "'])[" + line + "]/following-sibling::div/ul/li[1]");
+        scrollIntoView("(.//td[@class='reason-request-col']//ul/li/a[.='" + requestedType + "'])[" + line + "]");
+        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='" + requestedType + "'])[" + line + "]").click();
+
+        moveTo("(.//*[@id='returnTrackingTableStep2']/tbody//tr)[1]//a[@data-name='" + requestedType + "']/ancestor::li[1]//ul/li[1]/a");
+        scrollIntoView("(.//*[@id='returnTrackingTableStep2']/tbody//tr)[" + line + "]//a[@data-name='" + requestedType + "']/ancestor::li[1]//ul/li/a[.='" + requestedSubType + "']");
+        moveTo("(.//td//p[.='Request Sub Type']/ancestor::div/ul/li/a[.='" + requestedType + "'])[" + line + "]/following-sibling::div/ul/li/a[.='" + requestedSubType + "']").click();
+        waitElementToBeClickable(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]");
     }
 
-    public void selectRequestedAction(String invoice, String product, String requestedAction){
-        String requestedActionDropDown=".//input[@name='invoiceNumber' and contains(@value,'"+invoice+"')]/ancestor::td[contains(text(),'"+product+"')]/following-sibling::td/div[@class='return-type']";
-        ((JavascriptExecutor)getDriver()).executeScript("arguments[0].scrollIntoView(true);",$(requestedActionDropDown));
-        moveTo(requestedActionDropDown).click();
-        moveTo("//ul[@class='select2-results__options']/li[.='"+requestedAction+"']").click();
+    public void selectReasonForRequest(String invoice, String product, String reason, String requestedType) {
+        selectReasonForRequest(invoice, product, reason);
+
+       // moveTo("(//table[@id='returnTrackingTableStep2']/tbody/tr)[" + line + "]/td[3]//a[@data-name='" + reasonForRequest + "']/ancestor::li//ul/li[1]/a");
+        //scrollIntoView("(//table[@id='returnTrackingTableStep2']/tbody/tr)[" + line + "]/td[3]//a[@data-name='" + reasonForRequest + "']/ancestor::li//ul/li/a[.='" + requestedType + "']");
+      //  moveTo("(//table[@id='returnTrackingTableStep2']/tbody/tr)[" + line + "]/td[3]//a[@data-name='" + reasonForRequest + "']/ancestor::li//ul/li/a[.='" + requestedType + "']").click();
+      //  waitElementToBeClickable(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]");
+    }
+
+    public WebElementFacade getReasonForRequestDropDown(String invoice, String product) {
+        return scrollIntoView(REASON_FOR_REQUEST_DROPDOWN.replace("$invoice", invoice).replace("$product", product));
+    }
+
+    public WebElementFacade selectReasonForRequest(String invoice, String product, String reason) {
+        WebElementFacade reasonForRequestDropDown = getReasonForRequestDropDown(invoice, product);
+        reasonForRequestDropDown.click();
+        WebElementFacade we =reasonForRequestDropDown.findBy("div[@class='return-type-dropdown dropdown open']//a[@data-type='reason' and .='"+reason+"']");
+        scrollIntoView(we);
+        moveTo(we).click();
+        return waitElementToBeClickable(reasonForRequestDropDown);
+    }
+//.//input[@name='invoiceNumber' and contains(@value,'0500083624')]/ancestor::td[contains(text(),'THQL1120')]/following-sibling::td[@class='reason-request-col']/div
+    public void selectRequestedAction(String invoice, String product, String requestedAction) {
+        scrollIntoView(REQUESTED_ACTION_DROPDOWN.replace("$invoice", invoice).replace("$product", product));
+        moveTo(REQUESTED_ACTION_DROPDOWN.replace("$invoice", invoice).replace("$product", product)).click();
+        moveTo(REQUESTED_ACTION_DROPDOWN_VALUE.replace("$requestedAction", requestedAction)).click();
     }
 
 }

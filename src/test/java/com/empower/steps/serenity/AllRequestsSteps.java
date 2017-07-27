@@ -138,16 +138,20 @@ public class AllRequestsSteps {
     }
 
     @Step
-    public void selectReasonForRequestForAllProducts(String reasonForRequest, String requestedType) {
-        for (int i = 1; i <= allRequestsPage.getAmountOfProductsStep_2(); i++) {
-            allRequestsPage.selectReasonForRequestForProductInLine(i, reasonForRequest, requestedType);
+    public void selectReasonForRequestForAllProducts(String reason, String requestedType) {
+        for (Invoice invoice:invoicesForRequest) {
+            for(InvoiceLine product:invoice.getLines()) {
+                allRequestsPage.selectReasonForRequest(invoice.getNumber(),product.getCatalogName(),reason, requestedType);
+            }
         }
     }
 
     @Step
-    public void selectReasonForRequestForAllProducts(String reasonForRequest) {
-        for (int i = 1; i <= allRequestsPage.getAmountOfProductsStep_2(); i++) {
-            allRequestsPage.selectReasonForRequestForProductInLine(i, reasonForRequest);
+    public void selectReasonForRequestForAllProducts(String reason) {
+        for (Invoice invoice:invoicesForRequest) {
+            for(InvoiceLine product:invoice.getLines()) {
+                allRequestsPage.selectReasonForRequest(invoice.getNumber(),product.getCatalogName(),reason);
+            }
         }
     }
 
