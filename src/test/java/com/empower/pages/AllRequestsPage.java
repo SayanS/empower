@@ -19,8 +19,8 @@ public class AllRequestsPage extends CustomPageObject {
     private String SEARCH_BY_DROP_DOWN = ".//div[@class='input-group-addon']";
     private String SEARCH_FIELD = ".//input[@name='value']";
     private String GO_BUTTON = ".//button[@id='spa-rev-filter-go-button']";
-    private String TOP_NEXT_BUTTON = "(.//button[contains(text(),'Next')])[1]";
-    private String BOTOM_NEXT_BUTTON = "(.//button[contains(text(),'Next')])[2]";
+    private String TOP_NEXT_BUTTON = "(.//section[@class=\"main-content-section create-return-content-section\"]/div//button[contains(text(),'Next')])[1]";
+    private String BOTOM_NEXT_BUTTON = "(.//section[@class=\"main-content-section create-return-content-section\"]/div//button[contains(text(),'Next')])[2]";
     private String ALL_ARROW_ICON = "(//table[@id='return-invoice-table']/tbody/tr/td/i)";
     private String STEP_1_ALL_CHECKBOXES_OF_PRODUCT_LIST_FOR_INVOICES = "(.//tbody/tr//label[contains(@class,'myCheckbox')])";
     private String STEP_1_ALL_NAMES_OF_PRODUCT_LIST_FOR_INVOICES = "(.//table[@id='return-invoice-line-table']/tbody/tr/td[3])";
@@ -80,7 +80,8 @@ public class AllRequestsPage extends CustomPageObject {
     }
 
     public void clickOnTopNextButton() {
-        (new WebDriverWait(getDriver(), 5000)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(TOP_NEXT_BUTTON)));
+        (new WebDriverWait(getDriver(), 5)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(TOP_NEXT_BUTTON)));
+        //scrollIntoView(TOP_NEXT_BUTTON);
         $(TOP_NEXT_BUTTON).click();
     }
 
