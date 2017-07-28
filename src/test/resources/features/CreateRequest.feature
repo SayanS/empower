@@ -29,15 +29,16 @@ Feature: Request creation
     Then Reason for Request step should contain all selected products from Step 1
     Then All Qty label on Reason for Request step should contain appropriate values from Step 1
     Then All Next buttons should be inactive
-    #Then Select Reason for Request "Defective" >> Requested Type "Performance" >> Requested Sub Type "Visual Indication Incorrect" for all products
+    Then Select Reason for Request "Defective" >> Requested Type "Performance" >> Requested Sub Type "Visual Indication Incorrect" for all products
     #Then Select Reason for Request "Technical Question" >> Requested Type "Other" for all products
     #Then Select Reason for Request "Order or Shipping Error" >> Requested Type "Shipped to Wrong Location" for all products
     #Then Select Reason for Request "Defective" >> Requested Type "Cosmetic" >> Requested Sub Type "Product" for all products
     #Then Select Reason for Request "Other"
-    Then Select Reason for Request "Wrong Product"
+    #Then Select Reason for Request "Wrong Product"
     Then Select Requested Action "Return & Repair" for all products
-
-
+    And Enter Requested Qty value "1" for all products
+    Then All Next buttons should be active
+    And Click on top Next button
 
 
 

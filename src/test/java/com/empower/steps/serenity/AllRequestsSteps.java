@@ -131,9 +131,11 @@ public class AllRequestsSteps {
     }
 
     @Step
-    public void selectReasonForRequestForAllProducts(String reasonForRequest, String requestedType, String requestedSubType) {
-        for (int i = 1; i <= allRequestsPage.getAmountOfProductsStep_2(); i++) {
-            allRequestsPage.selectReasonForRequestForProductInLine(i, reasonForRequest, requestedType, requestedSubType);
+    public void selectReasonForRequestForAllProducts(String reason, String requestedType, String requestedSubType) {
+        for (Invoice invoice:invoicesForRequest) {
+            for(InvoiceLine product:invoice.getLines()) {
+                allRequestsPage.selectReasonForRequest(invoice.getNumber(),product.getCatalogName(),reason, requestedType, requestedSubType);
+            }
         }
     }
 
@@ -160,6 +162,14 @@ public class AllRequestsSteps {
         for (Invoice invoice:invoicesForRequest) {
             for(InvoiceLine product:invoice.getLines()) {
                 allRequestsPage.selectRequestedAction(invoice.getNumber(),product.getCatalogName(),requestedAction);
+            }
+        }
+    }
+    @Step
+    public void enterRequestedQtyValueForAllProducts(String requestedQty) {
+        for(Invoice invoice:invoicesForRequest){
+            for(InvoiceLine product:invoice.getLines()){
+                allRequestsPage.enterRequestedQty(invoice.getNumber(),product.getCatalogName(),requestedQty);
             }
         }
     }

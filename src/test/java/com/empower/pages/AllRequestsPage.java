@@ -3,10 +3,8 @@ package com.empower.pages;
 import com.empower.models.Invoice;
 import com.empower.models.InvoiceLine;
 import net.serenitybdd.core.annotations.findby.By;
-import net.serenitybdd.core.pages.PageObject;
 import net.serenitybdd.core.pages.WebElementFacade;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -31,8 +29,7 @@ public class AllRequestsPage extends CustomPageObject {
     private String STEP_2_REQUEST_ACTION_DROPDOWN = "(.//td[@class='request-action-col']//select)";
     private String REQUESTED_ACTION_DROPDOWN = ".//input[@name='invoiceNumber' and contains(@value,'$invoice')]/ancestor::td[contains(text(),'$product')]/following-sibling::td/div[@class='return-type']";
     private String REQUESTED_ACTION_DROPDOWN_VALUE = "//ul[@class='select2-results__options']/li[.='$requestedAction']";
-    private String REASON_FOR_REQUEST_DROPDOWN = ".//input[@name='invoiceNumber' and contains(@value,'$invoice')]/ancestor::td[contains(text(),'$product')]/following-sibling::td[@class='reason-request-col']";
-
+    private String STEP_2_NEW_REQUEST_LINE = ".//input[@name='invoiceNumber' and contains(@value,'$invoice')]/ancestor::td[contains(text(),'$product')]/ancestor::tr";
 
     public void clickOnCreateRequestButton() {
         Actions actions = new Actions(getDriver());
@@ -154,49 +151,58 @@ public class AllRequestsPage extends CustomPageObject {
     }
 
 
-    public void selectReasonForRequestForProductInLine(Integer line, String reasonForRequest, String requestedType, String requestedSubType) {
-        scrollIntoView(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]");
-        $(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]").click();
-
-        scrollIntoView("(.//td[@class='reason-request-col']//ul/li/a[.='" + reasonForRequest + "'])[" + line + "]");
-        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='" + reasonForRequest + "'])[" + line + "]").click();
-
-        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='" + reasonForRequest + "'])[" + line + "]/following-sibling::div/ul/li[1]");
-        scrollIntoView("(.//td[@class='reason-request-col']//ul/li/a[.='" + requestedType + "'])[" + line + "]");
-        moveTo("(.//td[@class='reason-request-col']//ul/li/a[.='" + requestedType + "'])[" + line + "]").click();
-
-        moveTo("(.//*[@id='returnTrackingTableStep2']/tbody//tr)[1]//a[@data-name='" + requestedType + "']/ancestor::li[1]//ul/li[1]/a");
-        scrollIntoView("(.//*[@id='returnTrackingTableStep2']/tbody//tr)[" + line + "]//a[@data-name='" + requestedType + "']/ancestor::li[1]//ul/li/a[.='" + requestedSubType + "']");
-        moveTo("(.//td//p[.='Request Sub Type']/ancestor::div/ul/li/a[.='" + requestedType + "'])[" + line + "]/following-sibling::div/ul/li/a[.='" + requestedSubType + "']").click();
-        waitElementToBeClickable(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]");
+    private String getXpathOfNewRequestLine(String invoice, String product) {
+        List<WebElementFacade> catalogNumberColumn=new ArrayList<>();
+        List<String> productsName=new ArrayList<>();
+        Integer line=1;
+        catalogNumberColumn=findAll(".//input[@name='invoiceNumber' and contains(@value,'"+invoice+"')]/ancestor::td[contains(text(),'"+product+"')]");
+        productsName=utils.getTextFromList(catalogNumberColumn);
+        for(String s:productsName){
+            if(s.equals(product)){
+                return "("+ STEP_2_NEW_REQUEST_LINE.replace("$invoice", invoice).replace("$product", product)+")["+line+"]";
+            }
+            line++;
+        }
+        return null;
     }
 
-    public void selectReasonForRequest(String invoice, String product, String reason, String requestedType) {
-        selectReasonForRequest(invoice, product, reason);
-
-       // moveTo("(//table[@id='returnTrackingTableStep2']/tbody/tr)[" + line + "]/td[3]//a[@data-name='" + reasonForRequest + "']/ancestor::li//ul/li[1]/a");
-        //scrollIntoView("(//table[@id='returnTrackingTableStep2']/tbody/tr)[" + line + "]/td[3]//a[@data-name='" + reasonForRequest + "']/ancestor::li//ul/li/a[.='" + requestedType + "']");
-      //  moveTo("(//table[@id='returnTrackingTableStep2']/tbody/tr)[" + line + "]/td[3]//a[@data-name='" + reasonForRequest + "']/ancestor::li//ul/li/a[.='" + requestedType + "']").click();
-      //  waitElementToBeClickable(STEP_2_REASON_FOR_REQUEST_DROPDOWN + "[" + line + "]");
+    public String selectReasonForRequest(String invoice, String product, String reason, String requestedType, String requestedSubType) {
+        String xpathOfNewRequestLine=selectReasonForRequest(invoice, product, reason, requestedType);
+        scrollIntoView(xpathOfNewRequestLine+"//ul/li/a[.='" + requestedSubType + "']");
+        moveTo(xpathOfNewRequestLine+"//ul/li/a[.='" + requestedSubType + "']").click();
+        waitElementToBeClickable(xpathOfNewRequestLine);
+        return xpathOfNewRequestLine;
     }
 
-    public WebElementFacade getReasonForRequestDropDown(String invoice, String product) {
-        return scrollIntoView(REASON_FOR_REQUEST_DROPDOWN.replace("$invoice", invoice).replace("$product", product));
+    public String selectReasonForRequest(String invoice, String product, String reason, String requestedType) {
+        String xpathOfNewRequestLine=selectReasonForRequest(invoice, product, reason);
+        moveTo(xpathOfNewRequestLine+"//a[@data-name='" + reason + "']/following-sibling::div/ul/li[1]/a");
+        scrollIntoView(xpathOfNewRequestLine+"//a[@data-name='" + reason + "']/following-sibling::div/ul/li/a[.='" + requestedType + "']");
+        moveTo(xpathOfNewRequestLine+"//a[@data-name='" + reason + "']/following-sibling::div/ul/li/a[.='" + requestedType + "']").click();
+        waitElementToBeClickable(xpathOfNewRequestLine);
+        return xpathOfNewRequestLine;
     }
 
-    public WebElementFacade selectReasonForRequest(String invoice, String product, String reason) {
-        WebElementFacade reasonForRequestDropDown = getReasonForRequestDropDown(invoice, product);
-        reasonForRequestDropDown.click();
-        WebElementFacade we =reasonForRequestDropDown.findBy("div[@class='return-type-dropdown dropdown open']//a[@data-type='reason' and .='"+reason+"']");
-        scrollIntoView(we);
-        moveTo(we).click();
-        return waitElementToBeClickable(reasonForRequestDropDown);
+    public String selectReasonForRequest(String invoice, String product, String reason) {
+        String xpathOfNewRequestLine = getXpathOfNewRequestLine(invoice, product);
+        scrollIntoView(xpathOfNewRequestLine+"/td[@class='reason-request-col']/div");
+        $(xpathOfNewRequestLine+"/td[@class='reason-request-col']/div").click();
+        scrollIntoView(xpathOfNewRequestLine+"/td[@class='reason-request-col']/div//a[@data-type='reason' and .='"+reason+"']");
+        moveTo(xpathOfNewRequestLine+"/td[@class='reason-request-col']/div//a[@data-type='reason' and .='"+reason+"']").click();
+        return xpathOfNewRequestLine+"/td[@class='reason-request-col']/div";
     }
-//.//input[@name='invoiceNumber' and contains(@value,'0500083624')]/ancestor::td[contains(text(),'THQL1120')]/following-sibling::td[@class='reason-request-col']/div
+
     public void selectRequestedAction(String invoice, String product, String requestedAction) {
-        scrollIntoView(REQUESTED_ACTION_DROPDOWN.replace("$invoice", invoice).replace("$product", product));
-        moveTo(REQUESTED_ACTION_DROPDOWN.replace("$invoice", invoice).replace("$product", product)).click();
+        String xpathOfNewRequestLine = getXpathOfNewRequestLine(invoice, product);
+        scrollIntoView(xpathOfNewRequestLine+"/td[@class='request-action-col']/div[@class='return-type']");
+        moveTo(xpathOfNewRequestLine+"/td[@class='request-action-col']/div[@class='return-type']").click();
         moveTo(REQUESTED_ACTION_DROPDOWN_VALUE.replace("$requestedAction", requestedAction)).click();
+    }
+
+    public void enterRequestedQty(String invoice, String product, String requestedQty){
+        String xpathOfNewRequestLine = getXpathOfNewRequestLine(invoice, product);
+        scrollIntoView(xpathOfNewRequestLine+"/td[@class='request-action-col']/div[@class='return-qty-col']");
+        $(xpathOfNewRequestLine+"//input[@class='form-control qty-input-val done']").type(requestedQty);
     }
 
 }

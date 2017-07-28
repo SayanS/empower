@@ -119,4 +119,9 @@ public class DefinitionStepsAllRequests {
     public void selectRequestedActionForAllProducts(String requestedAction) {
         allRequestsSteps.selectRequestedActionForAllProducts(requestedAction);
     }
+
+    @And("^Enter Requested Qty value \"([^\"]*)\" for all products$")
+    public void enterRequestedQtyValueForAllProducts(String requestedQty) {
+        allRequestsSteps.enterRequestedQtyValueForAllProducts(requestedQty);
+    }
 }
