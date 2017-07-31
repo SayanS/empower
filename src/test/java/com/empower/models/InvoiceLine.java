@@ -9,18 +9,23 @@ public class InvoiceLine implements Comparator<InvoiceLine> {
     private String returnable;
     private String labelQty;
     private String reasonForRequest;
+    private String requestedType;
+    private String requestedSubType;
     private String requestedAction;
     private String requestedQty;
 
-    public InvoiceLine(){}
+    public InvoiceLine() {
+    }
 
-    public InvoiceLine(InvoiceLine invoiceLine){
-        this.checkedForRequest=invoiceLine.checkedForRequest;
-        this.catalogName=invoiceLine.catalogName;
-        this.qty=invoiceLine.qty;
-        this.returnable=invoiceLine.returnable;
-        this.reasonForRequest=invoiceLine.reasonForRequest;
-        this.requestedAction=invoiceLine.requestedQty;
+    public InvoiceLine(InvoiceLine invoiceLine) {
+        this.checkedForRequest = invoiceLine.checkedForRequest;
+        this.catalogName = invoiceLine.catalogName;
+        this.qty = invoiceLine.qty;
+        this.returnable = invoiceLine.returnable;
+        this.reasonForRequest = invoiceLine.reasonForRequest;
+        this.requestedType = invoiceLine.requestedType;
+        this.requestedSubType = invoiceLine.requestedSubType;
+        this.requestedAction = invoiceLine.requestedQty;
     }
 
     public String getReasonForRequest() {
@@ -29,6 +34,22 @@ public class InvoiceLine implements Comparator<InvoiceLine> {
 
     public void setReasonForRequest(String reasonForRequest) {
         this.reasonForRequest = reasonForRequest;
+    }
+
+    public String getRequestedType() {
+        return requestedType;
+    }
+
+    public void setRequestedType(String requestedType) {
+        this.requestedType = requestedType;
+    }
+
+    public String getRequestedSubType() {
+        return requestedSubType;
+    }
+
+    public void setRequestedSubType(String requestedSubType) {
+        this.requestedSubType = requestedSubType;
     }
 
     public String getRequestedAction() {
@@ -47,12 +68,12 @@ public class InvoiceLine implements Comparator<InvoiceLine> {
         this.requestedQty = requestedQty;
     }
 
-    public String getLabelQty(){
+    public String getLabelQty() {
         return this.labelQty;
     }
 
-    public void setLabelQty(String labelQty){
-        this.labelQty=labelQty;
+    public void setLabelQty(String labelQty) {
+        this.labelQty = labelQty;
     }
 
     public Boolean getCheckedForRequest() {
@@ -87,16 +108,12 @@ public class InvoiceLine implements Comparator<InvoiceLine> {
         this.returnable = returnable;
     }
 
-    public int compareTo(Object obj)
-    {
+    public int compareTo(Object obj) {
         InvoiceLine tmp = (InvoiceLine) obj;
-        if(this.catalogName.compareTo(tmp.catalogName)>0)
-        {
+        if (this.catalogName.compareTo(tmp.catalogName) > 0) {
       /* текущее меньше полученного */
             return -1;
-        }
-        else if(this.catalogName.compareTo(tmp.catalogName)<0)
-        {
+        } else if (this.catalogName.compareTo(tmp.catalogName) < 0) {
       /* текущее больше полученного */
             return 1;
         }

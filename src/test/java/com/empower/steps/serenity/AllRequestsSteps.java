@@ -4,13 +4,29 @@ import com.empower.models.Invoice;
 import com.empower.models.InvoiceLine;
 import com.empower.pages.AllRequestsPage;
 import com.empower.pages.Utils;
+import com.esotericsoftware.yamlbeans.YamlException;
+import com.esotericsoftware.yamlbeans.YamlReader;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import net.thucydides.core.annotations.Step;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Assert;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 public class AllRequestsSteps {
     private AllRequestsPage allRequestsPage;
+    private List<Invoice> expectedProductsForReturn = new ArrayList<>();
     private List<Invoice> invoicesForRequest = new ArrayList<>();
     private List<InvoiceLine> actualCatalogNamesLabelQty = new ArrayList<>();
     List<InvoiceLine> expectedInvoicesLines = new ArrayList<>();
@@ -172,5 +188,20 @@ public class AllRequestsSteps {
                 allRequestsPage.enterRequestedQty(invoice.getNumber(),product.getCatalogName(),requestedQty);
             }
         }
+    }
+    @Step
+    public void selectProductsFromInvoicesForReturnFromFile(String pathFile) throws IOException {
+     /*   YamlReader reader = new YamlReader(new FileReader(pathFile));
+        List<Invoice> invoice=new ArrayList<>();
+        invoice = (List<Invoice>)reader.read();
+        expectedProductsForReturn= (List<Invoice>) invoice;
+        expectedProductsForReturn.get(2).getLines().get(2).getCatalogName();
+       */
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<Invoice> invoice=new ArrayList<>();
+        invoice = mapper.readValue(new File(pathFile), new TypeReference<List<Invoice>>() {});
+
+        int i=0;
     }
 }

@@ -1,12 +1,16 @@
 Feature: Request creation
 
-  Background: Open URL
-    Given Open Login Page
-    Given Login with "testempadmin" and "test123test"
-    When Search for account "2244410" from region "North America"
-    And Select account "2244410" from search results with Sales org "GEIS United States"
-    And Close Tooltip pop-up
-    And Select "All Requests" option from Post Sales item of the Header menu
+ # Background: Open URL
+ #   Given Open Login Page
+ #   Given Login with "testempadmin" and "test123test"
+ #   When Search for account "2244410" from region "North America"
+ #   And Select account "2244410" from search results with Sales org "GEIS United States"
+ #   And Close Tooltip pop-up
+ #   And Select "All Requests" option from Post Sales item of the Header menu
+
+  Scenario: Check ability to add products from several invoices to request list
+    #When Click on Create Request button
+    And Select products from invoices for return from file "/home/user/IdeaProjects/empower/src/test/resources/TestingData/inv.json"
 
   Scenario: Check ability to add products from several invoices to request list
     And Click on Create Request button

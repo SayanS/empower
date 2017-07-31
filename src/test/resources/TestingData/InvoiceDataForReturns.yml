@@ -1,0 +1,55 @@
+- number: "500083624"
+  date: ""
+  poNumber: ""
+  geSalesOrder: ""
+  checkedForRequest: null
+  - lines:
+     - checkedForRequest: null
+      catalogName: "THQL1120"
+      qty: ""
+      returnable: ""
+      labelQty: ""
+      reasonForRequest: "Defective"
+      requestedType: "Performance"
+      requestedSubType: "Visual Indication Incorrect"
+      requestedAction: "Return & Repair"
+      requestedQty: "1"
+
+     - checkedForRequest: null
+      catalogName: "THN3361R"
+      qty: ""
+      returnable: ""
+      labelQty: ""
+      reasonForRequest: "Defective"
+      requestedType: "Performance"
+      requestedSubType: "Visual Indication Incorrect"
+      requestedAction: "Return & Repair"
+      requestedQty: "1"
+
+- number: "500140223"
+  date: ""
+  poNumber: ""
+  geSalesOrder: ""
+  checkedForRequest: null
+  - lines:
+     - checkedForRequest: null
+      catalogName: "THQL1120"
+      qty: ""
+      returnable: ""
+      labelQty: ""
+      reasonForRequest: "Defective"
+      requestedType: "Performance"
+      requestedSubType: "Visual Indication Incorrect"
+      requestedAction: "Return & Repair"
+      requestedQty: "1"
+
+    - checkedForRequest: null
+      catalogName: "TEY350"
+      qty: ""
+      returnable: ""
+      labelQty: ""
+      reasonForRequest: "Defective"
+      requestedType: "Performance"
+      requestedSubType: "Visual Indication Incorrect"
+      requestedAction: "Return & Repair"
+      requestedQty: "1"

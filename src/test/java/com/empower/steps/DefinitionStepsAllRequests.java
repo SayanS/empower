@@ -1,11 +1,14 @@
 package com.empower.steps;
 
 import com.empower.steps.serenity.AllRequestsSteps;
+import com.esotericsoftware.yamlbeans.YamlException;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import net.thucydides.core.annotations.Steps;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -123,5 +126,10 @@ public class DefinitionStepsAllRequests {
     @And("^Enter Requested Qty value \"([^\"]*)\" for all products$")
     public void enterRequestedQtyValueForAllProducts(String requestedQty) {
         allRequestsSteps.enterRequestedQtyValueForAllProducts(requestedQty);
+    }
+
+    @And("^Select products from invoices for return from file \"([^\"]*)\"$")
+    public void selectProductsFromInvoicesForReturnFromFile(String pathFile) throws IOException {
+        allRequestsSteps.selectProductsFromInvoicesForReturnFromFile(pathFile);
     }
 }
