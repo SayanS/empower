@@ -38,7 +38,7 @@ public class CustomPageObject extends PageObject{
         return $(xpath);
     }
 
-    public WebElementFacade waitElementToBeClickable(WebElementFacade webElement){
+    public WebElementFacade  waitElementToBeClickable(WebElementFacade webElement){
         try {
             (new WebDriverWait(getDriver(), 5)).until(ExpectedConditions.elementToBeClickable(webElement));
         }catch(Exception e){
@@ -51,5 +51,9 @@ public class CustomPageObject extends PageObject{
         Actions actions=new Actions(getDriver());
         actions.moveToElement(webElementFacade);
         return webElementFacade;
+    }
+
+    public void clickOnButton(String buttonName) {
+        waitElementToBeClickable(".//button[.='Go']").click();
     }
 }

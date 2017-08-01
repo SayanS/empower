@@ -1,20 +1,26 @@
 Feature: Request creation
 
- # Background: Open URL
- #   Given Open Login Page
- #   Given Login with "testempadmin" and "test123test"
- #   When Search for account "2244410" from region "North America"
- #   And Select account "2244410" from search results with Sales org "GEIS United States"
- #   And Close Tooltip pop-up
- #   And Select "All Requests" option from Post Sales item of the Header menu
+  Background: Open URL
+    Given Open Login Page
+    Given Login with "testempadmin" and "test123test"
+    When Search for account "2244410" from region "North America"
+    And Select account "2244410" from search results with Sales org "GEIS United States"
+    And Close Tooltip pop-up
+    And Select "All Requests" option from Post Sales item of the Header menu
+
+    Scenario: Search invoices for return request by Date range
+      When Click on Create Request button
+      And Search for "THQL1120" by "Catalog No."
+      When Select Invoice date range from "01-01-2010" to "01-01-2017"
+      And Click on "Go" button
 
   Scenario: Check ability to add products from several invoices to request list
-    #When Click on Create Request button
-    And Select products from invoices for return from file "/home/user/IdeaProjects/empower/src/test/resources/TestingData/inv.json"
+    And Search and Select products from invoices for return from file "./src/test/resources/TestingData/InvoiceDataForReturns.json"
 
   Scenario: Check ability to add products from several invoices to request list
     And Click on Create Request button
-    And Search for "thql1120" by "Catalog No."
+    And Search for "THQL1120" by "Catalog No."
+    And Click on "Go" button
     Then All Next buttons should be inactive
     And Select Invoice from Search results in line "1"
     And Select All Product from requested list

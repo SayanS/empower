@@ -5,10 +5,12 @@ import com.esotericsoftware.yamlbeans.YamlException;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import net.thucydides.core.annotations.Steps;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 
@@ -128,8 +130,18 @@ public class DefinitionStepsAllRequests {
         allRequestsSteps.enterRequestedQtyValueForAllProducts(requestedQty);
     }
 
-    @And("^Select products from invoices for return from file \"([^\"]*)\"$")
-    public void selectProductsFromInvoicesForReturnFromFile(String pathFile) throws IOException {
-        allRequestsSteps.selectProductsFromInvoicesForReturnFromFile(pathFile);
+    @And("^Search and Select products from invoices for return from file \"([^\"]*)\"$")
+    public void searchAndSelectProductsFromInvoicesForReturnFromFile(String pathFile) throws IOException {
+        allRequestsSteps.searchAndSelectProductsFromInvoicesForReturnFromFile(pathFile);
+    }
+
+    @When("^Select Invoice date range from \"([^\"]*)\" to \"([^\"]*)\"$")
+    public void selectInvoiceDateRangeFromTo(String dateFrom, String dateTo) throws Throwable {
+       allRequestsSteps.selectInvoiceDateRangeFromTo(dateFrom, dateTo);
+    }
+
+    @And("^Click on \"([^\"]*)\" button$")
+    public void clickOnButton(String buttonName) {
+        allRequestsSteps.clickOnButton(buttonName);
     }
 }

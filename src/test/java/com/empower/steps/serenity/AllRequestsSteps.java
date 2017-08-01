@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -190,18 +191,26 @@ public class AllRequestsSteps {
         }
     }
     @Step
-    public void selectProductsFromInvoicesForReturnFromFile(String pathFile) throws IOException {
-     /*   YamlReader reader = new YamlReader(new FileReader(pathFile));
+    public void searchAndSelectProductsFromInvoicesForReturnFromFile(String pathFile) throws IOException {
+        //If type of the file ".yml"
+        /*
+        YamlReader reader = new YamlReader(new FileReader(pathFile));
         List<Invoice> invoice=new ArrayList<>();
         invoice = (List<Invoice>)reader.read();
         expectedProductsForReturn= (List<Invoice>) invoice;
         expectedProductsForReturn.get(2).getLines().get(2).getCatalogName();
-       */
-
+        */
+        //If type of the file ".json"
         ObjectMapper mapper = new ObjectMapper();
         List<Invoice> invoice=new ArrayList<>();
         invoice = mapper.readValue(new File(pathFile), new TypeReference<List<Invoice>>() {});
-
-        int i=0;
+    }
+    @Step
+    public void selectInvoiceDateRangeFromTo(String dateFrom, String dateTo) throws ParseException {
+        allRequestsPage.selectInvoiceDateRangeFromTo(dateFrom, dateTo);
+    }
+    @Step
+    public void clickOnButton(String buttonName) {
+        allRequestsPage.clickOnButton(buttonName);
     }
 }
