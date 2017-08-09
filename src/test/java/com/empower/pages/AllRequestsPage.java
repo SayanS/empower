@@ -31,6 +31,8 @@ public class AllRequestsPage extends CustomPageObject {
     private String REQUESTED_ACTION_DROPDOWN = ".//input[@name='invoiceNumber' and contains(@value,'$invoice')]/ancestor::td[contains(text(),'$product')]/following-sibling::td/div[@class='return-type']";
     private String REQUESTED_ACTION_DROPDOWN_VALUE = "//ul[@class='select2-results__options']/li[.='$requestedAction']";
     private String STEP_2_NEW_REQUEST_LINE = ".//input[@name='invoiceNumber' and contains(@value,'$invoice')]/ancestor::td[contains(text(),'$product')]/ancestor::tr";
+    private String SEARCH_RESULTS_INVOICE_ROW="(.//table[@id='return-invoice-table']/tbody/tr)";
+    private String SEARCH_RESULTS_TOTAL_INVOICES=".//h4/span[@class='total-search-results']";
 
 
     public void clickOnCreateRequestButton() {
@@ -65,13 +67,25 @@ public class AllRequestsPage extends CustomPageObject {
         $(ALL_ARROW_ICON + "[" + lineNumber + "]").click();
 
         invoice.setNumber($("(.//table[@id='return-invoice-table']//tr/td[1])" + "[" + lineNumber + "]").getText());
-        invoice.setDate($("(.//table[@id='return-invoice-table']//tr/td[2])" + "[" + lineNumber + "]").getText());
+        invoice.setDate($("(.//table[@id='return-invoice-table']//tr/td[2])" + "[" + lineNumber + "]").getText().replace("/","-"));
         invoice.setPoNumber($("(.//table[@id='return-invoice-table']//tr/td[3])" + "[" + lineNumber + "]").getText());
         invoice.setGeSalesOrder($("(.//table[@id='return-invoice-table']//tr/td[4])" + "[" + lineNumber + "]").getText());
         invoice.setCheckedForRequest(true);
         return invoice;
     }
 
+    public List<Invoice> getAllInvoicesFromSearchResults() {
+        List<Invoice> invoices=new ArrayList<>();
+        Invoice invoice=new Invoice();
+        for(int i=1; i<=Integer.valueOf($(SEARCH_RESULTS_TOTAL_INVOICES).getText());i++) {
+            invoice.setNumber($("(.//table[@id='return-invoice-table']//tr/td[1])" + "[" + i + "]").getText());
+            invoice.setDate($("(.//table[@id='return-invoice-table']//tr/td[2])" + "[" + i + "]").getText().replace("/","-"));
+            invoice.setPoNumber($("(.//table[@id='return-invoice-table']//tr/td[3])" + "[" + i + "]").getText());
+            invoice.setGeSalesOrder($("(.//table[@id='return-invoice-table']//tr/td[4])" + "[" + i + "]").getText());
+            invoices.add(new Invoice(invoice));
+        }
+        return invoices;
+    }
 
     public String getColorOfArrowIcon(String line) {
         waitABit(5000);
@@ -204,46 +218,52 @@ public class AllRequestsPage extends CustomPageObject {
         $(xpathOfNewRequestLine + "//input[@class='form-control qty-input-val done']").type(requestedQty);
     }
 
-    public void selectInvoiceDateRangeFromTo(String dateFrom, String dateTo) throws ParseException {
-        String NEXT_YEAR_BUTTON = ".//div[@class='datepicker-months']/table/thead/tr/th[@class='next']";
-        String PREV_YEAR_BUTTON = ".//div[@class='datepicker-months']/table/thead/tr/th[@class='prev']";
-        String DATE_PICKER_BUTTON = ".//div[@class='datepicker-days']/table/thead/tr/th[@class='datepicker-switch']";
-        String DATE_PICKER_MONTHS_BUTTON = ".//div[@class='datepicker-months']/table/thead/tr/th[@class='datepicker-switch']";
-        String MONTH_PICKERS = "(.//div[@class='datepicker-months']/table/tbody/tr/td/span)";
-        String DAY_PICKERS = "(.//div[@class='datepicker-days']/table/tbody/tr/td[@class='day'])";
-        String INVOICE_DATE_FROM_FIELD = "(.//div[@class='input-group date datetimepicker']/a)[1]";
-        String INVOICE_DATE_TO_FIELD = "(.//div[@class='input-group date datetimepicker']/a)[2]";
+//    public void selectInvoiceDateRangeFromTo(String dateFrom, String dateTo) throws ParseException {
+//        String NEXT_YEAR_BUTTON = ".//div[@class='datepicker-months']/table/thead/tr/th[@class='next']";
+//        String PREV_YEAR_BUTTON = ".//div[@class='datepicker-months']/table/thead/tr/th[@class='prev']";
+//        String DATE_PICKER_BUTTON = ".//div[@class='datepicker-days']/table/thead/tr/th[@class='datepicker-switch']";
+//        String DATE_PICKER_MONTHS_BUTTON = ".//div[@class='datepicker-months']/table/thead/tr/th[@class='datepicker-switch']";
+//        String MONTH_PICKERS = "(.//div[@class='datepicker-months']/table/tbody/tr/td/span)";
+//        String DAY_PICKERS = "(.//div[@class='datepicker-days']/table/tbody/tr/td[@class='day'])";
+//        String INVOICE_DATE_FROM_FIELD = "(.//div[@class='input-group date datetimepicker']/a)[1]";
+//        String INVOICE_DATE_TO_FIELD = "(.//div[@class='input-group date datetimepicker']/a)[2]";
+//        Calendar cal;
+//        cal=utils.stringToDate("MM-dd-yyyy",dateFrom);
+//        $(INVOICE_DATE_FROM_FIELD).click();
+//        $(DATE_PICKER_BUTTON).click();
+//        while (Integer.valueOf($(DATE_PICKER_MONTHS_BUTTON).getText()) != cal.get(Calendar.YEAR)) {
+//            if (cal.get(Calendar.YEAR) > Integer.valueOf($(DATE_PICKER_MONTHS_BUTTON).getText())) {
+//                $(NEXT_YEAR_BUTTON).click();
+//            } else {
+//                $(PREV_YEAR_BUTTON).click();
+//            }
+//        }
+//        $(MONTH_PICKERS + "[" + cal.get(Calendar.MONTH + 1) + "]").click();
+//        $(DAY_PICKERS + "[" + cal.get(Calendar.DAY_OF_MONTH) + "]").click();
+//
+//        cal = utils.stringToDate("MM-dd-yyyy",dateTo);
+//        $(INVOICE_DATE_TO_FIELD).click();
+//        $(DATE_PICKER_BUTTON).click();
+//        while (Integer.valueOf($(DATE_PICKER_MONTHS_BUTTON).getText()) != cal.get(Calendar.YEAR)) {
+//            if (cal.get(Calendar.YEAR) > Integer.valueOf($(DATE_PICKER_MONTHS_BUTTON).getText())) {
+//                $(NEXT_YEAR_BUTTON).click();
+//            } else {
+//                $(PREV_YEAR_BUTTON).click();
+//            }
+//        }
+//        $(MONTH_PICKERS + "[" + cal.get(Calendar.MONTH + 1) + "]").click();
+//        $(DAY_PICKERS + "[" + cal.get(Calendar.DAY_OF_MONTH) + "]").click();
+//    }
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = dateFormat.parse(dateFrom);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        $(INVOICE_DATE_FROM_FIELD).click();
-        $(DATE_PICKER_BUTTON).click();
-        while (Integer.valueOf($(DATE_PICKER_MONTHS_BUTTON).getText()) != cal.get(Calendar.YEAR)) {
-            if (cal.get(Calendar.YEAR) > Integer.valueOf($(DATE_PICKER_MONTHS_BUTTON).getText())) {
-                $(NEXT_YEAR_BUTTON).click();
-            } else {
-                $(PREV_YEAR_BUTTON).click();
-            }
-        }
-        $(MONTH_PICKERS + "[" + cal.get(Calendar.MONTH + 1) + "]").click();
-        $(DAY_PICKERS + "[" + cal.get(Calendar.DAY_OF_MONTH) + "]").click();
-
-        date = dateFormat.parse(dateTo);
-        cal = Calendar.getInstance();
-        cal.setTime(date);
-        $(INVOICE_DATE_TO_FIELD).click();
-        $(DATE_PICKER_BUTTON).click();
-        while (Integer.valueOf($(DATE_PICKER_MONTHS_BUTTON).getText()) != cal.get(Calendar.YEAR)) {
-            if (cal.get(Calendar.YEAR) > Integer.valueOf($(DATE_PICKER_MONTHS_BUTTON).getText())) {
-                $(NEXT_YEAR_BUTTON).click();
-            } else {
-                $(PREV_YEAR_BUTTON).click();
-            }
-        }
-        $(MONTH_PICKERS + "[" + cal.get(Calendar.MONTH + 1) + "]").click();
-        $(DAY_PICKERS + "[" + cal.get(Calendar.DAY_OF_MONTH) + "]").click();
+    public long getAmountOfInvoicesInSearchResults() {
+        return findAll(SEARCH_RESULTS_INVOICE_ROW).size();
     }
 
+    public long getTotalSearchResultsValue() {
+        return Long.valueOf($(SEARCH_RESULTS_TOTAL_INVOICES).getText());
+    }
+
+    public String getSelectedOptionOfRangeInput(String rangeInputName){
+        return $(".//label[.='$rangeInputName']//ancestor::ul/li[@class='range-input']//span[@id='select2-valueType-2x-container']".replace("$rangeInputName",rangeInputName)).getText();
+    }
 }

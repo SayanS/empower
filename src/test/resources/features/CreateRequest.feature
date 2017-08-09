@@ -1,18 +1,25 @@
 Feature: Request creation
 
-  Background: Open URL
+  Scenario: Search invoices for return request by Date range
     Given Open Login Page
     Given Login with "testempadmin" and "test123test"
     When Search for account "2244410" from region "North America"
     And Select account "2244410" from search results with Sales org "GEIS United States"
     And Close Tooltip pop-up
     And Select "All Requests" option from Post Sales item of the Header menu
+    When Click on Create Request button
+    And Search for "THQL1120" by "Catalog No."
+    When Select Invoice date range from "01-01-2014" to "01-01-2017"
+    And Click on "Go" button
+    Then All Next buttons should be inactive
+    Then All Invoices in Search results should be from date range "01-01-2010" to "01-01-2017"
+    Then Amount of invoices should be equal to Total Search Results
 
-    Scenario: Search invoices for return request by Date range
-      When Click on Create Request button
-      And Search for "THQL1120" by "Catalog No."
-      When Select Invoice date range from "01-01-2010" to "01-01-2017"
-      And Click on "Go" button
+    Scenario: Check ability to reset the Search filters
+      When Click on "Reset" button
+      Then For "Search" range-input should be selected option "PO No."
+      #Then "Search" range-input should be displayed with prompt "Search by PO No."
+
 
   Scenario: Check ability to add products from several invoices to request list
     And Search and Select products from invoices for return from file "./src/test/resources/TestingData/InvoiceDataForReturns.json"

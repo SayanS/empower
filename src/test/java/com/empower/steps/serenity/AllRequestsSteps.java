@@ -14,18 +14,21 @@ import net.thucydides.core.annotations.Step;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Assert;
+import com.empower.pages.Utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 public class AllRequestsSteps {
+    Utils utils;
     private AllRequestsPage allRequestsPage;
     private List<Invoice> expectedProductsForReturn = new ArrayList<>();
     private List<Invoice> invoicesForRequest = new ArrayList<>();
@@ -207,10 +210,30 @@ public class AllRequestsSteps {
     }
     @Step
     public void selectInvoiceDateRangeFromTo(String dateFrom, String dateTo) throws ParseException {
-        allRequestsPage.selectInvoiceDateRangeFromTo(dateFrom, dateTo);
+        allRequestsPage.selectDateRangeFilter(dateFrom, dateTo);
     }
     @Step
     public void clickOnButton(String buttonName) {
         allRequestsPage.clickOnButton(buttonName);
+    }
+
+    @Step
+    public void isAllInvoicesInSearchResultsFromDateRange(String fromDate, String toDate) throws ParseException {
+        String format="MM-dd-yyyy";
+        for(Invoice invoice:allRequestsPage.getAllInvoicesFromSearchResults()){
+            Assert.assertTrue("The date "+invoice.getDate()+" of Invoice № "+invoice.getNumber()+" is lower then expected fromDate "+fromDate,
+                              utils.stringToDate(format, invoice.getDate()).getTime().after(utils.stringToDate(format, fromDate).getTime()));
+
+            Assert.assertTrue("The date "+invoice.getDate()+" of Invoice № "+invoice.getNumber()+" is bigger then expected toDate "+toDate+"/n",
+                    utils.stringToDate(format, invoice.getDate()).getTime().before(utils.stringToDate(format, toDate).getTime()));
+        }
+    }
+    @Step
+    public void isAmountOfInvoicesEqualToTotalSearchResults() {
+        Assert.assertEquals(allRequestsPage.getAmountOfInvoicesInSearchResults(),allRequestsPage.getTotalSearchResultsValue());
+    }
+    @Step
+    public void isOptionSelectedFromRangeInput(String rangeInputName, String optionName) {
+        Assert.assertEquals(optionName,allRequestsPage.getSelectedOptionOfRangeInput(rangeInputName));
     }
 }

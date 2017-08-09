@@ -144,4 +144,19 @@ public class DefinitionStepsAllRequests {
     public void clickOnButton(String buttonName) {
         allRequestsSteps.clickOnButton(buttonName);
     }
+
+    @Then("^All Invoices in Search results should be from date range \"([^\"]*)\" to \"([^\"]*)\"$")
+    public void searchResultsShouldContainInvoicesWithDateFromRange(String fromDate, String toDate) throws Throwable {
+        allRequestsSteps.isAllInvoicesInSearchResultsFromDateRange(fromDate,toDate);
+    }
+
+    @Then("^Amount of invoices should be equal to Total Search Results$")
+    public void isAmountOfInvoicesEqualToTotalSearchResults() {
+        allRequestsSteps.isAmountOfInvoicesEqualToTotalSearchResults();
+    }
+
+    @Then("^For \"([^\"]*)\" range-input should be selected option \"([^\"]*)\"$")
+    public void forRangeInputShouldBeSelectedOption(String rangeInputName, String optionName) throws Throwable {
+        allRequestsSteps.isOptionSelectedFromRangeInput(rangeInputName, optionName);
+    }
 }
